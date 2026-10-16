@@ -7,7 +7,7 @@ import { RetellClient } from "https://cdn.jsdelivr.net/npm/retell-client-js-sdk@
 // Javni podaci (bezbedni za frontend). Zaštita: dozvoljen samo ovaj domen, reCAPTCHA v3 i Fraud Protection u Retell-u.
 const PUBLIC_KEY = "public_key_cd715369f57786900dff9";
 const RECAPTCHA_KEY = "6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr";
-const DNEVNI_LIMIT = 2;   // zajedno za sve demo razgovore na sajtu, po browseru
+const DNEVNI_LIMIT = 1;   // jedan demo razgovor dnevno po browseru, za obe delatnosti zajedno
 const MAX_SEKUNDI = 180;  // agent u Retell-u sam prekida posle 3 minuta; browser prekida nekoliko sekundi kasnije za svaki slučaj
 
 // Svaki novi publish agenta u Retell-u ⇒ povećati agentVersion ovde.
@@ -125,8 +125,8 @@ function preostalo() { return Math.max(0, DNEVNI_LIMIT - procitaj()); }
 function tekstPreostalo() {
   const n = preostalo();
   return n > 0
-    ? "Danas možete obaviti još " + n + (n === 1 ? " probni razgovor." : " probna razgovora.")
-    : "Danas ste iskoristili oba probna razgovora. Pokušajte ponovo sutra.";
+    ? "Danas možete obaviti " + (n === 1 ? "jedan probni razgovor." : n + " probna razgovora.")
+    : "Danas ste već obavili probni razgovor. Pokušajte ponovo sutra ili zakažite razgovor sa nama.";
 }
 const mmss = (s) => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
 
