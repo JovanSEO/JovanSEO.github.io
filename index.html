@@ -11,7 +11,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" />
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/style.css?v=3" />
+
+  <!-- Zaštita od spama: Google reCAPTCHA v3 (nevidljiva; site key je javan, secret key je samo u Retell-u). -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"></script>
 
   <!-- Meta Pixel „Callsistent – sajt". Ne šalje ništa dok posetilac ne prihvati kolačiće (fbq consent). -->
   <script>
@@ -40,7 +43,7 @@
         <li class="hide-sm"><a href="#kako-funkcionise">Kako funkcioniše</a></li>
         <li class="hide-sm"><a href="#pitanja">Pitanja</a></li>
         <li class="hide-sm"><a href="#" data-zakazi>Zakažite razgovor</a></li>
-        <li><a class="btn btn-primary" href="#delatnosti">Isprobajte</a></li>
+        <li><a class="btn btn-primary" href="#delatnosti" data-izbor-demo>Isprobajte</a></li>
       </ul>
     </div>
   </nav>
@@ -54,7 +57,7 @@
           beleži podatke, zakazuje termine, odgovara na pitanja, a hitne slučajeve odmah prebacuje vama.
           Svaki poziv završava kao red u vašoj tabeli.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="#delatnosti">Demo poziv</a>
+          <a class="btn btn-primary" href="#delatnosti" data-izbor-demo>Demo poziv</a>
           <a class="btn btn-ghost" href="#" data-zakazi>Zakažite razgovor</a>
         </div>
         <p class="small">Demo razgovori za advokatske kancelarije i bolnice, direktno iz browsera.</p>
@@ -161,7 +164,7 @@
         <p class="muted">Svaki propušteni poziv je izgubljen klijent ili pacijent, i izgubljen novac. Čujte kako Ana
           razgovara, a zatim zakažite kratak razgovor sa nama.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="#delatnosti">Isprobajte demo</a>
+          <a class="btn btn-primary" href="#delatnosti" data-izbor-demo>Isprobajte demo</a>
           <a class="btn btn-ghost" href="#" data-zakazi>Zakažite razgovor (30 min)</a>
         </div>
       </div>
@@ -204,7 +207,8 @@
     </div>
   </div>
 
-  <script src="assets/saglasnost.js"></script>
+  <script src="assets/saglasnost.js?v=3"></script>
   <script src="assets/zakazivanje.js"></script>
+  <script type="module" src="assets/demo.js?v=3"></script>
 </body>
 </html>
