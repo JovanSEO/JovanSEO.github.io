@@ -187,6 +187,7 @@ function zavrseno() {
   anaGovori = false;
   bar.hidden = true;
   fab.hidden = false;
+  document.body.classList.remove("cs-poziv");
   poziv = null;
   zauzeto = false;
   document.title = naslovStranice;
@@ -215,6 +216,7 @@ async function zapocni() {
   if (preostalo() === 0) return osveziIzbor();
   zauzeto = true;
   fab.hidden = true;
+  document.body.classList.add("cs-poziv");
   pocetak = 0;
   let ziv = false;
   $(".cs-ustanova").textContent = agent.ustanova;
