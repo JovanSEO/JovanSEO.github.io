@@ -210,3 +210,27 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
 
 /* Navigacija: trenutna delatnost */
 .nav ul a[aria-current="page"] { color: var(--text); }
+
+/* Plutajuće dugme „Demo poziv" (dole desno) sa izborom delatnosti */
+.fab { position: fixed; right: 20px; bottom: 20px; z-index: 25; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.fab[hidden] { display: none; }
+.fab-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; border: 0; border-radius: 999px; cursor: pointer;
+           background: var(--primary); color: var(--primary-text); font: 600 16px/1 var(--sans);
+           box-shadow: 0 16px 40px -12px rgba(15, 42, 68, .55); }
+.fab-btn:hover { background: var(--primary-hover); }
+.fab-btn .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); animation: puls 1.4s ease-in-out infinite; }
+.fab-panel { width: min(340px, calc(100vw - 32px)); background: var(--card); color: var(--text); border: 1px solid var(--border);
+             border-radius: var(--radius); padding: 18px; box-shadow: 0 24px 48px -20px rgba(15, 42, 68, .45); }
+.fab-panel[hidden] { display: none; }
+.fab-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 6px; font: 600 19px/1.2 var(--serif); }
+.fab-x { background: none; border: 0; padding: 0 4px; font-size: 26px; line-height: 1; color: var(--muted); cursor: pointer; }
+.fab-panel p { margin: 0 0 12px; font-size: 14.5px; color: var(--muted); }
+.fab-opcija { display: block; width: 100%; margin: 0 0 10px; padding: 12px 14px; text-align: left; cursor: pointer; font: inherit;
+              color: var(--text); background: var(--alt); border: 1px solid var(--border); border-radius: 8px; }
+.fab-opcija:hover, .fab-opcija:focus-visible { border-color: var(--accent); }
+.fab-opcija:focus-visible, .fab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fab-opcija b { display: block; font-size: 16px; }
+.fab-opcija span { display: block; margin-top: 2px; font-size: 14px; color: var(--muted); }
+.fab-panel .fab-napomena { margin: 4px 0 0; font-size: 13px; }
+@media (max-width: 520px) { .fab { right: 12px; bottom: 12px; } .cs-consent-open .fab { display: none; } }
+@media (prefers-reduced-motion: reduce) { .fab-btn .dot { animation: none; } }
