@@ -303,3 +303,23 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
   .fab-btn .dot, .cs-tacka, .cs-demo[data-govori] .cs-avatar, .cs-demo[data-govori] .cs-avatar::before,
   .cs-demo[data-govori] .cs-avatar::after { animation: none; }
 }
+
+/* Meni na telefonu: dugme sa tri crte otvara iste stavke kao na desktopu (assets/meni.js) */
+.nav-meni { display: none; align-items: center; justify-content: center; padding: 8px; margin-right: -8px; border: 0; border-radius: 8px;
+            background: none; color: var(--text); cursor: pointer; }
+.nav-meni:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-meni .iks, .nav.otvoren .nav-meni .crte { display: none; }
+.nav.otvoren .nav-meni .iks { display: inline; }
+.nav-mejl { display: none; }
+@media (max-width: 860px) {
+  .nav .wrap { gap: 10px; }
+  .nav ul { order: 2; margin-left: auto; }
+  .nav-meni { display: inline-flex; order: 3; }
+  .nav.otvoren ul { position: absolute; top: 68px; left: 0; right: 0; margin: 0; flex-direction: column; align-items: stretch; gap: 0;
+                    padding: 4px 16px 18px; background: var(--bg); border-bottom: 1px solid var(--border);
+                    box-shadow: 0 24px 32px -24px rgba(15, 42, 68, .4); }
+  .nav.otvoren ul li.hide-sm, .nav.otvoren ul li.nav-mejl { display: block; }
+  .nav.otvoren ul li a { display: block; padding: 13px 2px; font-size: 17px; border-bottom: 1px solid var(--border); }
+  .nav.otvoren ul li a.btn { display: flex; margin-top: 16px; padding: 13px 16px; font-size: 16px; border-bottom: 0; }
+  .nav.otvoren ul li.nav-mejl a { padding: 14px 2px 0; font-size: 15px; text-align: center; border-bottom: 0; }
+}

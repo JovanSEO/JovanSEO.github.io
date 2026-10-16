@@ -13,7 +13,7 @@ const MAX_SEKUNDI = 180;  // agent u Retell-u sam prekida posle 3 minuta; browse
 // Svaki novi publish agenta u Retell-u ⇒ povećati agentVersion ovde.
 const AGENTI = {
   advokati: {
-    agentId: "agent_29fc33afe76037882eb0c1826e", agentVersion: 3,
+    agentId: "agent_29fc33afe76037882eb0c1826e", agentVersion: 4,
     naziv: "Advokatska kancelarija", opis: "Novi predmet, hitan slučaj, poruka advokatu",
     ustanova: "Advokatska kancelarija Test", klijenti: "klijentima vaše kancelarije",
     primeri: ["Brat mi je upravo uhapšen, treba nam advokat odmah.",
@@ -21,7 +21,7 @@ const AGENTI = {
       "Ostavio bih poruku advokatici Jovanović."],
   },
   bolnice: {
-    agentId: "agent_70e1c03b54d30e103e02051677", agentVersion: 1,
+    agentId: "agent_70e1c03b54d30e103e02051677", agentVersion: 2,
     naziv: "Bolnica ili klinika", opis: "Zakazivanje pregleda, nalazi, hitno stanje",
     ustanova: "Bolnica Test", klijenti: "pacijentima vaše ustanove",
     primeri: ["Treba mi pregled kod kardiologa, imam polisu osiguranja.",
