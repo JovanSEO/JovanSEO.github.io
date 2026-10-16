@@ -207,3 +207,6 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
 .consent p { margin: 0 0 14px; color: var(--muted); }
 .consent .btn { padding: 9px 16px; font-size: 14px; }
 @media (max-width: 520px) { .consent { left: 12px; right: 12px; max-width: none; } }
+
+/* Navigacija: trenutna delatnost */
+.nav ul a[aria-current="page"] { color: var(--text); }
