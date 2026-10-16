@@ -148,6 +148,31 @@ section.alt { background: var(--alt); }
 .scenarios li b { display: block; font-size: 14px; letter-spacing: .02em; }
 .scenarios li span { font-size: 15.5px; color: color-mix(in srgb, var(--primary-text) 78%, transparent); }
 .firm { margin-top: 28px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--primary-text) 22%, transparent); font-size: 14.5px; }
+.demo .btn-ghost { color: var(--primary-text); border-color: color-mix(in srgb, var(--primary-text) 40%, transparent); }
+.demo .btn-ghost:hover { border-color: var(--primary-text); }
+.demo .actions + .small { margin-top: 16px; }
+
+/* Početna: lista poziva u hero kartici */
+.calllist { list-style: none; margin: 0; padding: 6px 20px 10px; }
+.calllist li { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border); font-size: 14.5px; }
+.calllist li:last-child { border-bottom: 0; }
+.calllist .tm { color: var(--muted); font-variant-numeric: tabular-nums; width: 44px; flex: none; }
+.calllist b { display: block; font-weight: 600; }
+.calllist li > span:nth-child(2) { color: var(--muted); flex: 1; }
+.calllist li > span:nth-child(2) b { color: var(--text); }
+.tag.hitno { color: #9b2c38; border-color: #efc3c8; background: #fdecee; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tag.hitno { color: #f4a7ae; border-color: #5a2c33; background: #2a1418; } }
+
+/* Početna: delatnosti */
+.sectors { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 860px) { .sectors { grid-template-columns: 1fr; } }
+.sector { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+          padding: 32px; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; }
+.sector:hover { border-color: var(--accent); box-shadow: 0 24px 48px -32px rgba(15, 42, 68, .45); }
+.sector h3 { font-size: 24px; margin: 10px 0 12px; }
+.sector ul { margin: 0 0 24px; padding-left: 20px; color: var(--muted); font-size: 16px; }
+.sector li { margin: 4px 0; }
+.sector .more { margin-top: auto; font-weight: 600; color: var(--accent); }
 
 /* Pitanja */
 details { border-bottom: 1px solid var(--border); padding: 18px 0; }
