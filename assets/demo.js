@@ -8,12 +8,12 @@ import { RetellClient } from "https://cdn.jsdelivr.net/npm/retell-client-js-sdk@
 const PUBLIC_KEY = "public_key_cd715369f57786900dff9";
 const RECAPTCHA_KEY = "6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr";
 const DNEVNI_LIMIT = 2;   // zajedno za sve demo razgovore na sajtu, po browseru
-const MAX_SEKUNDI = 300;  // agent u Retell-u sam prekida posle 5 minuta; browser prekida nekoliko sekundi kasnije za svaki slučaj
+const MAX_SEKUNDI = 180;  // agent u Retell-u sam prekida posle 3 minuta; browser prekida nekoliko sekundi kasnije za svaki slučaj
 
 // Svaki novi publish agenta u Retell-u ⇒ povećati agentVersion ovde.
 const AGENTI = {
   advokati: {
-    agentId: "agent_29fc33afe76037882eb0c1826e", agentVersion: 2,
+    agentId: "agent_29fc33afe76037882eb0c1826e", agentVersion: 3,
     naziv: "Advokatska kancelarija", opis: "Novi predmet, hitan slučaj, poruka advokatu",
     ustanova: "Advokatska kancelarija Test", klijenti: "klijentima vaše kancelarije",
     primeri: ["Brat mi je upravo uhapšen, treba nam advokat odmah.",
@@ -21,7 +21,7 @@ const AGENTI = {
       "Ostavio bih poruku advokatici Jovanović."],
   },
   bolnice: {
-    agentId: "agent_70e1c03b54d30e103e02051677", agentVersion: 0,
+    agentId: "agent_70e1c03b54d30e103e02051677", agentVersion: 1,
     naziv: "Bolnica ili klinika", opis: "Zakazivanje pregleda, nalazi, hitno stanje",
     ustanova: "Bolnica Test", klijenti: "pacijentima vaše ustanove",
     primeri: ["Treba mi pregled kod kardiologa, imam polisu osiguranja.",
@@ -60,7 +60,7 @@ const dlg = element(
       '</div>' +
       '<p class="cs-poruka" aria-live="polite"></p>' +
       `<button type="button" class="cs-pozovi" data-akcija="pozovi">${PHONE}<span>Pozovi</span></button>` +
-      '<p class="cs-sitno">Najviše 5 minuta po razgovoru. Najbolje sa slušalicama.</p>' +
+      '<p class="cs-sitno">Najviše 3 minuta po razgovoru. Najbolje sa slušalicama.</p>' +
       '<a class="cs-zakazi-link" href="#" data-zakazi-demo>Radije biste razgovarali sa nama? Zakažite razgovor</a>' +
     '</div>' +
 
@@ -69,7 +69,7 @@ const dlg = element(
       '<div class="cs-avatar" aria-hidden="true"><span>A</span></div>' +
       '<h2 class="cs-ko">Ana · <span class="cs-ustanova"></span></h2>' +
       '<p class="cs-status" aria-live="polite">Povezivanje…</p>' +
-      '<p class="cs-vreme"><span class="cs-sat">00:00</span> / 05:00</p>' +
+      '<p class="cs-vreme"><span class="cs-sat">00:00</span> / 03:00</p>' +
       '<div class="cs-traka" aria-hidden="true"><span></span></div>' +
       '<div class="cs-primeri"><p>Probajte da kažete</p><ul></ul></div>' +
       '<div class="cs-dugmad">' +
@@ -92,7 +92,7 @@ const dlg = element(
 
 // Umanjen prikaz dok razgovor traje, a prozor je sklonjen.
 const bar = element('<div class="callbar" hidden><span class="dot" aria-hidden="true"></span>' +
-  '<span class="cs-bar-status">Razgovor u toku</span><span class="time"><span class="cs-bar-sat">00:00</span><span class="cs-bar-max"> / 05:00</span></span>' +
+  '<span class="cs-bar-status">Razgovor u toku</span><span class="time"><span class="cs-bar-sat">00:00</span><span class="cs-bar-max"> / 03:00</span></span>' +
   '<button class="btn" type="button" data-akcija="prosiri">Prikaži</button>' +
   '<button class="btn btn-zavrsi" type="button" data-akcija="zavrsi">Završi</button></div>');
 
@@ -142,7 +142,7 @@ function osveziIzbor(greska) {
   poruka.textContent = greska || tekstPreostalo();
   poruka.classList.toggle("greska", Boolean(greska));
   $('[data-korak="izbor"] .cs-zakazi-link')?.toggleAttribute("hidden", n > 0);
-  if (napomena) napomena.textContent = "Razgovor ide preko browsera i traje najviše 5 minuta. " + tekstPreostalo();
+  if (napomena) napomena.textContent = "Razgovor ide preko browsera i traje najviše 3 minuta. " + tekstPreostalo();
 }
 
 function pokaziProzor() {
