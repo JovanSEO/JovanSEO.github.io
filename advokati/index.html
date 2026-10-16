@@ -8,14 +8,19 @@
   <meta name="robots" content="noindex" />
   <link rel="stylesheet" href="../assets/style.css" />
 
-  <!-- Retell widget (samo glas). Javni ključ je bezbedan za frontend; dozvoljeni domeni se podešavaju u Retell dashboardu. -->
+  <!-- Zaštita od spama: Google reCAPTCHA v3 (site key je javan; secret key je samo u Retell-u). -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"></script>
+
+  <!-- Retell widget (samo glas). Javni ključ je bezbedan za frontend; dozvoljeni domen (jovanseo.github.io),
+       reCAPTCHA i Fraud Protection se podešavaju u Retell dashboardu. Verzija 1 = limit 5 min po razgovoru. -->
   <script
     id="retell-widget"
     src="https://dashboard.retellai.com/retell-widget-v2.js"
     type="module"
-    data-voice-public-key="RETELL_PUBLIC_KEY"
+    data-voice-public-key="public_key_cd715369f57786900dff9"
     data-voice-agent-id="agent_29fc33afe76037882eb0c1826e"
-    data-agent-version="0"
+    data-agent-version="1"
+    data-recaptcha-key="6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"
     data-title="Ana – Halo AI"
     data-bot-name="Ana"
     data-fab-text="Razgovarajte sa Anom"
@@ -48,7 +53,7 @@
         <button class="btn btn-primary" type="button" id="pozovi">🎙️ Razgovarajte sa Anom</button>
         <a class="btn btn-ghost" href="#scenariji">Šta da probam?</a>
       </div>
-      <p class="note" id="napomena">Poziv ide preko browsera: dozvolite pristup mikrofonu, a najbolje je sa slušalicama.
+      <p class="note" id="napomena">Poziv ide preko browsera: dozvolite pristup mikrofonu, a najbolje je sa slušalicama. Demo razgovor traje najviše 5 minuta.
         Ako se razgovor ne otvori, kliknite „Razgovarajte sa Anom" u donjem desnom uglu.</p>
     </div>
   </header>
