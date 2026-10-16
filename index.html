@@ -16,6 +16,16 @@
   <!-- Zaštita od spama: Google reCAPTCHA v3 (nevidljiva; site key je javan, secret key je samo u Retell-u). -->
   <script src="https://www.google.com/recaptcha/api.js?render=6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"></script>
 
+  <!-- Meta Pixel „Callsistent – sajt". Ne šalje ništa dok posetilac ne prihvati kolačiće (fbq consent). -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('consent', 'revoke');
+    fbq('init', '2196038948458091');
+    fbq('track', 'PageView');
+  </script>
+
 </head>
 <body>
   <nav class="nav">
@@ -56,7 +66,7 @@
         <header><strong>Rezime poziva</strong><span>danas, 18:42 · 3 min 12 s</span></header>
         <dl>
           <dt>Pozivalac</dt><dd>Jelena Marković</dd>
-          <dt>Telefon</dt><dd>064 123 4567 <span class="tag ok">potvrđen</span></dd>
+          <dt>Telefon</dt><dd>064 1•• ••67 <span class="tag ok">potvrđen</span></dd>
           <dt>Vrsta poziva</dt><dd>Novi predmet</dd>
           <dt>Oblast</dt><dd>Porodično pravo · razvod i starateljstvo</dd>
           <dt>Druga strana</dt><dd>Dragan Marković <span class="tag ok">potvrđeno</span></dd>
@@ -211,11 +221,36 @@
 
   <footer class="site">
     <div class="wrap">
-      <span>© 2026 Callsistent · Test verzija</span>
+      <span>© 2026 Callsistent · Test verzija · <a href="#" id="kolacici">Podešavanja kolačića</a></span>
       <span>Sajt štiti reCAPTCHA; važe Google <a href="https://policies.google.com/privacy">Politika privatnosti</a> i
         <a href="https://policies.google.com/terms">Uslovi korišćenja</a>.</span>
     </div>
   </footer>
+
+  <div class="consent" id="consent" hidden>
+    <p>Koristimo kolačiće za merenje uspešnosti oglasa (Meta Pixel). Bez vaše saglasnosti ništa ne merimo.</p>
+    <div class="actions">
+      <button class="btn btn-ghost" type="button" id="consent-ne">Odbijam</button>
+      <button class="btn btn-primary" type="button" id="consent-da">Prihvatam</button>
+    </div>
+  </div>
+
+  <script>
+    // Saglasnost za Meta Pixel: pamti se u browseru; bez „Prihvatam" Pixel ne šalje podatke.
+    (function () {
+      var box = document.getElementById("consent");
+      function procitaj() { try { return localStorage.getItem("cs_consent"); } catch (e) { return null; } }
+      function sacuvaj(v) { try { localStorage.setItem("cs_consent", v); } catch (e) {} }
+      function primeni(v) { if (v === "da" && window.fbq) fbq("consent", "grant"); }
+      var odluka = procitaj();
+      if (odluka) primeni(odluka); else box.hidden = false;
+      document.getElementById("consent-da").addEventListener("click", function () { sacuvaj("da"); primeni("da"); box.hidden = true; });
+      document.getElementById("consent-ne").addEventListener("click", function () {
+        sacuvaj("ne"); if (window.fbq) fbq("consent", "revoke"); box.hidden = true;
+      });
+      document.getElementById("kolacici").addEventListener("click", function (e) { e.preventDefault(); box.hidden = false; });
+    })();
+  </script>
 
   <div class="callbar" id="callbar" hidden>
     <span class="dot" aria-hidden="true"></span>
@@ -274,6 +309,7 @@
       bar.hidden = true;
       poziv = null;
       zauzeto = false;
+      pocetak = 0;
       prikaziPreostalo();
     }
 
@@ -295,6 +331,7 @@
             if (status === "live" && !ziv) {
               ziv = true;
               upisi(procitaj() + 1);
+              if (window.fbq) fbq("trackCustom", "DemoStart");
               pocetak = Date.now();
               barStatus.textContent = "Razgovor u toku";
               tajmer = setInterval(() => {
@@ -314,7 +351,11 @@
               poruka("Razgovor trenutno nije mogao da počne. Pokušajte ponovo za minut.");
             }
           },
-          onEnd: () => { if (poziv) zavrseno(); },
+          onEnd: () => {
+            if (!poziv) return;
+            if (pocetak && window.fbq) fbq("trackCustom", "DemoEnd", { trajanje_s: Math.round((Date.now() - pocetak) / 1000) });
+            zavrseno();
+          },
         },
       });
     }
