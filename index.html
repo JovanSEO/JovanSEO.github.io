@@ -16,23 +16,6 @@
   <!-- Zaštita od spama: Google reCAPTCHA v3 (nevidljiva; site key je javan, secret key je samo u Retell-u). -->
   <script src="https://www.google.com/recaptcha/api.js?render=6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"></script>
 
-  <!-- Retell widget (samo glas). Dozvoljeni domen, reCAPTCHA i Fraud Protection se podešavaju u Retell dashboardu.
-       Agent verzija 1 = najviše 5 minuta po razgovoru. -->
-  <script
-    id="retell-widget"
-    src="https://dashboard.retellai.com/retell-widget-v2.js"
-    type="module"
-    data-voice-public-key="public_key_cd715369f57786900dff9"
-    data-voice-agent-id="agent_29fc33afe76037882eb0c1826e"
-    data-agent-version="1"
-    data-recaptcha-key="6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"
-    data-title="Ana – Halo AI"
-    data-bot-name="Ana"
-    data-fab-text="Razgovarajte sa Anom"
-    data-show-ai-popup="false"
-    data-theme-color="#0f2a44"
-    data-component-color="#a8834b"
-  ></script>
 </head>
 <body>
   <nav class="nav">
@@ -67,7 +50,7 @@
           <button class="btn btn-primary" type="button" data-pozovi>Razgovarajte sa Anom</button>
           <a class="btn btn-ghost" href="#kako-funkcionise">Kako funkcioniše</a>
         </div>
-        <p class="small">Demo razgovor iz browsera, najviše 5 minuta. Potreban je mikrofon.</p>
+        <p class="small">Demo razgovor iz browsera: do 5 minuta, najviše 2 razgovora dnevno. Potreban je mikrofon.</p>
       </div>
 
       <aside class="summary" aria-label="Primer rezimea poziva">
@@ -83,7 +66,7 @@
           <dt>Termin</dt><dd>Utorak, posle 14 časova</dd>
           <dt>Sledeći korak</dt><dd>Potvrditi termin konsultacija</dd>
         </dl>
-        <footer>Primer rezimea koji advokat dobija posle poziva</footer>
+        <footer>Primer reda iz tabele poziva koju kancelarija vidi</footer>
       </aside>
     </div>
   </header>
@@ -106,9 +89,9 @@
             vaše kancelarije: oblastima rada, radnom vremenu, ceni konsultacija.</p>
         </div>
         <div class="step">
-          <h3>Rezime za advokata</h3>
-          <p>Po završetku poziva advokat dobija strukturisan rezime mejlom, hitni slučajevi stižu i SMS porukom, a svi
-            pozivi se vode u preglednoj tabeli.</p>
+          <h3>Sve u kalendaru i tabeli</h3>
+          <p>Dogovorene konsultacije upisuju se direktno u kalendar advokata, a svaki poziv kao novi red u tabelu
+            (Google Sheets) koju kancelarija vidi u svakom trenutku.</p>
         </div>
       </div>
     </div>
@@ -144,8 +127,9 @@
     <div class="wrap split">
       <div>
         <span class="eyebrow">Šta beleži</span>
-        <h2>Strukturisan rezime svakog poziva</h2>
-        <p class="muted">Advokat ne mora da preslušava razgovor. Svi podaci stižu uređeni, sa potvrđenim brojem telefona.</p>
+        <h2>Svaki poziv, jedan red u tabeli</h2>
+        <p class="muted">Advokat ne mora da preslušava razgovor. Podaci se automatski upisuju u tabelu kancelarije,
+          uređeni i sa potvrđenim brojem telefona.</p>
         <dl class="fields">
           <div><dt>Ime i prezime</dt><dd>pozivaoca</dd></div>
           <div><dt>Broj telefona</dt><dd>ponovljen i potvrđen</dd></div>
@@ -167,7 +151,7 @@
           <li><strong>Čuva poverljivost</strong><span>Ne potvrđuje niti poriče da je neko klijent kancelarije i ne govori o predmetima.</span></li>
           <li><strong>Poštuje vaša ograničenja</strong><span>Predmete koje kancelarija ne preuzima ljubazno odbija, bez trošenja vašeg vremena.</span></li>
           <li><strong>Transparentna je</strong><span>Na početku se predstavlja kao virtuelna asistentkinja i obaveštava da se razgovor beleži.</span></li>
-          <li><strong>Bez audio snimaka</strong><span>Rezime i transkript vidi samo vaša kancelarija; sa svakom kancelarijom potpisuje se ugovor o obradi podataka.</span></li>
+          <li><strong>Bez audio snimaka</strong><span>Razgovor se ne snima; podaci o pozivu upisuju se samo u tabelu vaše kancelarije.</span></li>
           <li><strong>Srpski i engleski</strong><span>Ako pozivalac pređe na engleski, razgovor se nastavlja na engleskom.</span></li>
         </ul>
       </div>
@@ -190,7 +174,7 @@
           <li><b>Predmet koji se ne preuzima</b><span>„Hoću da tužim banku zbog kredita."</span></li>
         </ul>
         <button class="btn btn-primary" type="button" data-pozovi>Započnite razgovor</button>
-        <p class="small" id="napomena">Razgovor ide preko browsera i traje najviše 5 minuta. Dozvolite pristup mikrofonu; najbolje je sa slušalicama.</p>
+        <p class="small" id="napomena" aria-live="polite">Razgovor ide preko browsera i traje najviše 5 minuta. Dozvolite pristup mikrofonu; najbolje je sa slušalicama.</p>
         <div class="firm muted">
           Izmišljena kancelarija: Advokatska kancelarija Test, Knez Mihailova 1, Beograd · ponedeljak–petak od 9 do 17 časova ·
           advokati Petar Petrović (krivično pravo, prekršaji) i Jelena Jovanović (porodično, nasledno i radno pravo) ·
@@ -213,13 +197,13 @@
         <p>Da. Ana se na početku razgovora predstavlja kao virtuelna asistentkinja kancelarije.</p></details>
       <details><summary>Šta se dešava kada je slučaj hitan?</summary>
         <p>Ana hitnu situaciju prepoznaje u bilo kom trenutku razgovora i odmah prebacuje poziv na mobilni telefon advokata.
-          Ako se advokat ne javi, uzima najvažnije podatke, a advokat dobija hitnu poruku.</p></details>
+          Ako se advokat ne javi, uzima najvažnije podatke, a poziv se u tabeli označava kao hitan.</p></details>
       <details><summary>Kako se zakazuju konsultacije?</summary>
         <p>Ana nudi slobodne termine iz kalendara advokata (Google ili Outlook) i upisuje dogovoreni termin.
           Kancelarija zadržava punu kontrolu nad rasporedom.</p></details>
       <details><summary>Da li se razgovori snimaju?</summary>
-        <p>Ne snimamo audio. Kancelarija dobija pisani rezime i transkript, a podaci se obrađuju u skladu sa
-          ugovorom o obradi podataka o ličnosti.</p></details>
+        <p>Ne. Svaki poziv se upisuje kao red u tabelu vaše kancelarije: ko je zvao, zbog čega, broj za povratni
+          poziv i šta je sledeći korak.</p></details>
       <details><summary>Koliko traje uvođenje?</summary>
         <p>Podešavanje za vašu kancelariju (advokati, oblasti, radno vreme, cene, pravila) i uključivanje preusmeravanja
           obavljaju se u nekoliko dana.</p></details>
@@ -234,32 +218,112 @@
     </div>
   </footer>
 
-  <script>
-    // Retell widget živi u shadow DOM-u ispod #retell-widget-root; tražimo njegovo dugme po tekstu (data-fab-text).
-    function nadjiDugme(root) {
-      var buttons = root.querySelectorAll("button");
-      for (var i = 0; i < buttons.length; i++) {
-        if ((buttons[i].textContent || "").indexOf("Razgovarajte sa Anom") !== -1) return buttons[i];
-      }
-      var all = root.querySelectorAll("*");
-      for (var j = 0; j < all.length; j++) {
-        if (all[j].shadowRoot) { var b = nadjiDugme(all[j].shadowRoot); if (b) return b; }
-      }
-      return null;
+  <div class="callbar" id="callbar" hidden>
+    <span class="dot" aria-hidden="true"></span>
+    <span id="callbar-status">Povezivanje…</span>
+    <span class="time" id="callbar-time">00:00 / 05:00</span>
+    <button class="btn" type="button" id="callbar-end">Završi</button>
+  </div>
+
+  <script type="module">
+    import { RetellClient } from "https://cdn.jsdelivr.net/npm/retell-client-js-sdk@3.0.2/+esm";
+
+    // Javni podaci (bezbedni za frontend). Zaštita: dozvoljen samo ovaj domen, reCAPTCHA v3 i Fraud Protection u Retell-u.
+    const PUBLIC_KEY = "public_key_cd715369f57786900dff9";
+    const AGENT_ID = "agent_29fc33afe76037882eb0c1826e";
+    const AGENT_VERSION = 1;          // verzija 1 = najviše 5 minuta po razgovoru
+    const RECAPTCHA_KEY = "6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr";
+    const DNEVNI_LIMIT = 2;
+    const MAX_SEKUNDI = 300;
+
+    const client = new RetellClient({ key: PUBLIC_KEY });
+    const bar = document.getElementById("callbar");
+    const barStatus = document.getElementById("callbar-status");
+    const barTime = document.getElementById("callbar-time");
+    const napomena = document.getElementById("napomena");
+    let poziv = null, tajmer = null, pocetak = 0, zauzeto = false;
+
+    const danas = () => new Date().toLocaleDateString("sv");
+    function procitaj() {
+      try {
+        const d = JSON.parse(localStorage.getItem("halo_demo") || "{}");
+        return d.datum === danas() ? d.broj || 0 : 0;
+      } catch (e) { return 0; }
     }
-    document.querySelectorAll("[data-pozovi]").forEach(function (el) {
-      el.addEventListener("click", function () {
-        var root = document.getElementById("retell-widget-root");
-        var fab = root && nadjiDugme(root);
-        if (fab) {
-          fab.click();
-        } else {
-          document.getElementById("napomena").textContent =
-            "Razgovor se još učitava. Sačekajte sekundu i pokušajte ponovo, ili kliknite dugme u donjem desnom uglu.";
-          document.getElementById("demo").scrollIntoView({ behavior: "smooth" });
-        }
+    function upisi(broj) {
+      try { localStorage.setItem("halo_demo", JSON.stringify({ datum: danas(), broj })); } catch (e) {}
+    }
+    function preostalo() { return Math.max(0, DNEVNI_LIMIT - procitaj()); }
+    function poruka(tekst) { napomena.textContent = tekst; }
+    function prikaziPreostalo() {
+      const n = preostalo();
+      poruka(n > 0
+        ? "Razgovor ide preko browsera i traje najviše 5 minuta. Danas možete obaviti još " + n + (n === 1 ? " probni razgovor." : " probna razgovora.")
+        : "Danas ste iskoristili oba probna razgovora. Pokušajte ponovo sutra.");
+    }
+    const mmss = (s) => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+
+    function recaptchaToken() {
+      return new Promise((resolve) => {
+        if (!window.grecaptcha) return resolve(undefined);
+        grecaptcha.ready(() => grecaptcha.execute(RECAPTCHA_KEY, { action: "web_call" }).then(resolve, () => resolve(undefined)));
       });
-    });
+    }
+
+    function zavrseno() {
+      clearInterval(tajmer);
+      bar.hidden = true;
+      poziv = null;
+      zauzeto = false;
+      prikaziPreostalo();
+    }
+
+    async function zapocni() {
+      if (zauzeto) return;
+      if (preostalo() === 0) { prikaziPreostalo(); document.getElementById("demo").scrollIntoView({ behavior: "smooth" }); return; }
+      bar.hidden = false;
+      barStatus.textContent = "Povezivanje…";
+      barTime.textContent = "00:00 / 05:00";
+      zauzeto = true;
+      let ziv = false;
+      const token = await recaptchaToken();
+      poziv = client.createWebCall({
+        agent_id: AGENT_ID,
+        agent_version: AGENT_VERSION,
+        recaptchaToken: token,
+        hooks: {
+          onStatus: (status) => {
+            if (status === "live" && !ziv) {
+              ziv = true;
+              upisi(procitaj() + 1);
+              pocetak = Date.now();
+              barStatus.textContent = "Razgovor u toku";
+              tajmer = setInterval(() => {
+                const s = Math.min(MAX_SEKUNDI, Math.floor((Date.now() - pocetak) / 1000));
+                barTime.textContent = mmss(s) + " / 05:00";
+              }, 500);
+            }
+          },
+          onAgentStartTalking: () => { if (ziv) barStatus.textContent = "Ana govori"; },
+          onAgentStopTalking: () => { if (ziv) barStatus.textContent = "Slušam vas"; },
+          onError: (err) => {
+            const t = String(err && err.message || err).toLowerCase();
+            zavrseno();
+            if (t.includes("permission") || t.includes("notallowed") || t.includes("microphone")) {
+              poruka("Dozvolite pristup mikrofonu u browseru i pokušajte ponovo.");
+            } else {
+              poruka("Razgovor trenutno nije mogao da počne. Pokušajte ponovo za minut.");
+            }
+          },
+          onEnd: () => { if (poziv) zavrseno(); },
+        },
+      });
+    }
+
+    document.querySelectorAll("[data-pozovi]").forEach((el) => el.addEventListener("click", zapocni));
+    document.getElementById("callbar-end").addEventListener("click", () => { if (poziv) poziv.end(); });
+    window.addEventListener("pagehide", () => { if (poziv) poziv.end(); });
+    prikaziPreostalo();
   </script>
 </body>
 </html>
