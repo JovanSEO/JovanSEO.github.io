@@ -269,6 +269,18 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
 .cs-pozovi svg { width: 20px; height: 20px; }
 .cs-sitno { margin: 12px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
 .cs-zakazi-link { display: block; margin-top: 10px; font-size: 14px; text-align: center; color: var(--text); }
+/* Prijava za demo: ime + mejl, pa šestocifreni kod iz mejla. */
+.cs-polje { display: block; margin: 0 0 14px; }
+.cs-polje span { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+.cs-polje input { width: 100%; padding: 13px 14px; font: 400 16px/1.3 var(--sans); color: var(--text);
+                  background: var(--alt); border: 1px solid var(--border); border-radius: 10px; }
+.cs-polje input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.cs-polje .cs-kod { font-size: 26px; font-weight: 600; letter-spacing: .35em; text-align: center; font-variant-numeric: tabular-nums; }
+.cs-kvacica { display: flex; gap: 10px; align-items: flex-start; margin: 2px 0 14px; font-size: 14px; color: var(--muted); cursor: pointer; }
+.cs-kvacica input { flex: none; width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--accent); }
+.cs-veza { padding: 0; border: 0; background: none; font: inherit; color: var(--text); text-decoration: underline; cursor: pointer; }
+.cs-forma > .cs-veza { display: block; margin: 12px auto 0; font-size: 14px; }
+.cs-nalog { margin-top: 6px; }
 
 .cs-korak[data-korak="poziv"] { text-align: center; }
 .cs-uzivo { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
