@@ -10,6 +10,7 @@
   --accent: #a8834b;
   --border: #e3e7ee;
   --logo: #0f2a44;
+  --ok: #1f8a4c; --ok-hover: #18733f; --danger: #c43d2f; --danger-hover: #a83226;
   --radius: 10px;
   --max: 1120px;
   --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -20,12 +21,14 @@
     --bg: #0b1320; --alt: #0f1a2b; --card: #121f33; --text: #e8edf5; --muted: #a3aec2;
     --primary: #d3deec; --primary-hover: #e6edf6; --primary-text: #0b1320;
     --accent: #c9a56a; --border: #22314a; --logo: #d3deec;
+    --ok: #2a9a5a; --ok-hover: #32ad67; --danger: #d9493b; --danger-hover: #e35b4d;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0b1320; --alt: #0f1a2b; --card: #121f33; --text: #e8edf5; --muted: #a3aec2;
   --primary: #d3deec; --primary-hover: #e6edf6; --primary-text: #0b1320;
   --accent: #c9a56a; --border: #22314a; --logo: #d3deec;
+    --ok: #2a9a5a; --ok-hover: #32ad67; --danger: #d9493b; --danger-hover: #e35b4d;
 }
 
 * { box-sizing: border-box; }
@@ -193,7 +196,7 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
            background: #0f2a44; color: #fff; box-shadow: 0 16px 40px -12px rgba(15, 42, 68, .55);
            font-size: 15px; white-space: nowrap; max-width: calc(100% - 32px); }
 .callbar[hidden] { display: none; }
-.callbar .dot { width: 9px; height: 9px; border-radius: 50%; background: #c9a56a; animation: puls 1.4s ease-in-out infinite; }
+.callbar .dot { width: 9px; height: 9px; border-radius: 50%; background: #e5594a; animation: puls 1.4s ease-in-out infinite; }
 .callbar .time { font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, .75); }
 .callbar .btn { padding: 8px 16px; font-size: 14px; background: #fff; color: #0f2a44; }
 @keyframes puls { 50% { opacity: .35; } }
@@ -211,26 +214,92 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
 /* Navigacija: trenutna delatnost */
 .nav ul a[aria-current="page"] { color: var(--text); }
 
-/* Plutajuće dugme „Demo poziv" (dole desno) sa izborom delatnosti */
-.fab { position: fixed; right: 20px; bottom: 20px; z-index: 25; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
-.fab[hidden] { display: none; }
+/* Plutajuće dugme „Demo poziv" (dole desno) otvara prozor demo poziva */
+.fab { position: fixed; right: 20px; bottom: 20px; z-index: 25; }
 .fab-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; border: 0; border-radius: 999px; cursor: pointer;
            background: var(--primary); color: var(--primary-text); font: 600 16px/1 var(--sans);
            box-shadow: 0 16px 40px -12px rgba(15, 42, 68, .55); }
 .fab-btn:hover { background: var(--primary-hover); }
+.fab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .fab-btn .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); animation: puls 1.4s ease-in-out infinite; }
-.fab-panel { width: min(340px, calc(100vw - 32px)); background: var(--card); color: var(--text); border: 1px solid var(--border);
-             border-radius: var(--radius); padding: 18px; box-shadow: 0 24px 48px -20px rgba(15, 42, 68, .45); }
-.fab-panel[hidden] { display: none; }
-.fab-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 6px; font: 600 19px/1.2 var(--serif); }
-.fab-x { background: none; border: 0; padding: 0 4px; font-size: 26px; line-height: 1; color: var(--muted); cursor: pointer; }
-.fab-panel p { margin: 0 0 12px; font-size: 14.5px; color: var(--muted); }
-.fab-opcija { display: block; width: 100%; margin: 0 0 10px; padding: 12px 14px; text-align: left; cursor: pointer; font: inherit;
-              color: var(--text); background: var(--alt); border: 1px solid var(--border); border-radius: 8px; }
-.fab-opcija:hover, .fab-opcija:focus-visible { border-color: var(--accent); }
-.fab-opcija:focus-visible, .fab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.fab-opcija b { display: block; font-size: 16px; }
-.fab-opcija span { display: block; margin-top: 2px; font-size: 14px; color: var(--muted); }
-.fab-panel .fab-napomena { margin: 4px 0 0; font-size: 13px; }
 @media (max-width: 520px) { .fab { right: 12px; bottom: 12px; } .cs-consent-open .fab { display: none; } }
-@media (prefers-reduced-motion: reduce) { .fab-btn .dot { animation: none; } }
+
+/* Prozor „Demo poziv": izbor → razgovor u toku → kraj */
+.fab[hidden], .callbar[hidden], .cs-demo [hidden] { display: none !important; }
+.cs-modal-open { overflow: hidden; }
+.cs-demo { width: min(460px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 0; overflow: auto;
+           background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 16px;
+           box-shadow: 0 40px 80px -24px rgba(5, 12, 24, .6); }
+.cs-demo::backdrop { background: rgba(8, 15, 28, .62); backdrop-filter: blur(3px); }
+.cs-telo { position: relative; padding: 28px 26px 24px; }
+.cs-x { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%;
+        background: transparent; color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; }
+.cs-x:hover { background: var(--alt); color: var(--text); }
+.cs-demo h2 { font-size: 28px; margin: 6px 0 8px; }
+.cs-uvod { margin: 0 0 18px; font-size: 15.5px; color: var(--muted); }
+.cs-opcije { display: grid; gap: 10px; margin-bottom: 14px; }
+.cs-opcija { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; cursor: pointer;
+             background: var(--alt); border: 1px solid var(--border); border-radius: 10px; }
+.cs-opcija:hover { border-color: var(--muted); }
+.cs-opcija:has(input:checked) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+                                background: color-mix(in srgb, var(--accent) 9%, var(--alt)); }
+.cs-opcija:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cs-opcija input { flex: none; width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); }
+.cs-opcija b { display: block; font-size: 16px; }
+.cs-opcija small { display: block; margin-top: 2px; font-size: 14px; color: var(--muted); }
+.cs-poruka { margin: 0 0 16px; font-size: 14px; color: var(--muted); }
+.cs-poruka.greska { color: var(--danger); font-weight: 600; }
+.cs-pozovi { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px 22px; cursor: pointer;
+             background: var(--ok); color: #fff; border: 0; border-radius: 999px; font: 600 18px/1 var(--sans);
+             box-shadow: 0 14px 30px -14px var(--ok); }
+.cs-pozovi:hover { background: var(--ok-hover); }
+.cs-pozovi:focus-visible, .cs-zavrsi:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.cs-pozovi:disabled { background: var(--border); color: var(--muted); box-shadow: none; cursor: not-allowed; }
+.cs-pozovi svg { width: 20px; height: 20px; }
+.cs-sitno { margin: 12px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
+.cs-zakazi-link { display: block; margin-top: 10px; font-size: 14px; text-align: center; color: var(--text); }
+
+.cs-korak[data-korak="poziv"] { text-align: center; }
+.cs-uzivo { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
+            background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger);
+            font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.cs-tacka { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: puls 1.2s ease-in-out infinite; }
+.cs-avatar { position: relative; display: grid; place-items: center; width: 112px; height: 112px; margin: 40px auto 26px;
+             border-radius: 50%; background: linear-gradient(145deg, #17395b, #0f2a44); color: #fff; font: 600 46px/1 var(--serif);
+             box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 28%, transparent); transition: box-shadow .3s; }
+.cs-avatar span { position: relative; z-index: 1; }
+.cs-avatar::before, .cs-avatar::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; }
+.cs-demo[data-govori="ana"] .cs-avatar::before { animation: talas 1.6s ease-out infinite; }
+.cs-demo[data-govori="ana"] .cs-avatar::after { animation: talas 1.6s ease-out .8s infinite; }
+.cs-demo[data-govori="vi"] .cs-avatar { box-shadow: 0 0 0 6px color-mix(in srgb, var(--ok) 45%, transparent); }
+.cs-demo[data-govori="veza"] .cs-avatar { animation: puls 1.4s ease-in-out infinite; }
+@keyframes talas { from { transform: scale(1); opacity: .75; } to { transform: scale(1.65); opacity: 0; } }
+.cs-demo .cs-ko { font-size: 22px; margin: 0 0 4px; }
+.cs-status { min-height: 1.6em; margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+.cs-vreme { margin: 0; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cs-sat { font-size: 20px; font-weight: 600; color: var(--text); }
+.cs-traka { max-width: 260px; height: 4px; margin: 10px auto 22px; border-radius: 4px; background: var(--border); overflow: hidden; }
+.cs-traka span { display: block; width: 0; height: 100%; background: var(--accent); transition: width .5s linear; }
+.cs-primeri { margin: 0 0 22px; padding: 14px 16px; text-align: left; background: var(--alt); border-radius: 10px; }
+.cs-primeri p { margin: 0 0 6px; font-size: 12.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+.cs-primeri ul { margin: 0; padding-left: 18px; font-size: 15px; }
+.cs-primeri li + li { margin-top: 4px; }
+.cs-dugmad { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.cs-dugmad .btn { border-radius: 999px; }
+.cs-korak[data-korak="kraj"] .cs-dugmad { justify-content: flex-start; }
+.cs-korak[data-korak="kraj"] .cs-sitno { text-align: left; }
+.cs-zavrsi { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; cursor: pointer;
+             background: var(--danger); color: #fff; border: 0; border-radius: 999px; font: 600 16px/1.2 var(--sans); }
+.cs-zavrsi:hover { background: var(--danger-hover); }
+.cs-zavrsi svg, .callbar .btn-zavrsi svg { transform: rotate(135deg); }
+.callbar .btn-zavrsi { background: var(--danger); color: #fff; }
+.callbar .btn-zavrsi:hover { background: var(--danger-hover); }
+@media (max-width: 520px) {
+  .cs-telo { padding: 24px 18px 20px; } .cs-avatar { width: 96px; height: 96px; margin: 32px auto 22px; }
+  .callbar { gap: 10px; padding-left: 14px; font-size: 14px; } .callbar .btn { padding: 8px 12px; } .cs-bar-max { display: none; }
+  .cs-korak[data-korak="poziv"] .cs-dugmad > * { flex: 1 1 100%; justify-content: center; } .cs-zavrsi { order: -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fab-btn .dot, .cs-tacka, .cs-demo[data-govori] .cs-avatar, .cs-demo[data-govori] .cs-avatar::before,
+  .cs-demo[data-govori] .cs-avatar::after { animation: none; }
+}
