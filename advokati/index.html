@@ -2,12 +2,257 @@
 <html lang="sr">
 <head>
   <meta charset="utf-8" />
-  <title>Callsistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Callsistent – AI recepcionistkinja za advokatske kancelarije</title>
+  <meta name="description" content="Callsistent preuzima pozive na koje advokatska kancelarija ne stigne da odgovori: kvalifikuje nove predmete, proverava sukob interesa, zakazuje konsultacije i hitne slučajeve odmah prosleđuje advokatu." />
   <meta name="robots" content="noindex" />
-  <link rel="canonical" href="https://jovanseo.github.io/" />
-  <meta http-equiv="refresh" content="0; url=../" />
+  <meta name="theme-color" content="#0f2a44" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" />
+  <link rel="stylesheet" href="../assets/style.css" />
+
+  <!-- Zaštita od spama: Google reCAPTCHA v3 (nevidljiva; site key je javan, secret key je samo u Retell-u). -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"></script>
+
+  <!-- Meta Pixel „Callsistent – sajt". Ne šalje ništa dok posetilac ne prihvati kolačiće (fbq consent). -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('consent', 'revoke');
+    fbq('init', '2196038948458091');
+    fbq('track', 'PageView');
+  </script>
+
 </head>
 <body>
-  <p>Stranica je premeštena na <a href="../">početnu</a>.</p>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="../" aria-label="Callsistent – početna">
+        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M47.6 16.4A22 22 0 1 0 47.6 47.6" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="49" cy="32" r="4.5" style="fill: var(--accent)"/>
+        </svg>
+        <b>Callsistent</b>
+      </a>
+      <ul>
+        <li class="hide-sm"><a href="#kako-funkcionise">Kako funkcioniše</a></li>
+        <li class="hide-sm"><a href="#tokom-poziva">Tokom poziva</a></li>
+        <li class="hide-sm"><a href="#diskrecija">Diskrecija</a></li>
+        <li class="hide-sm"><a href="#pitanja">Pitanja</a></li>
+        <li class="hide-sm"><a href="#" data-zakazi>Zakažite razgovor</a></li>
+        <li><a class="btn btn-primary" href="#demo">Isprobajte</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">AI recepcija za advokatske kancelarije</span>
+        <h1>Vaša kancelarija je dostupna i kada vi niste.</h1>
+        <p class="lead">Callsistent preuzima pozive na koje kancelarija ne stigne da odgovori. Razgovara sa klijentima na srpskom,
+          prikuplja podatke o predmetu, proverava sukob interesa i zakazuje konsultacije, a hitne slučajeve odmah
+          prosleđuje advokatu.</p>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-pozovi>Razgovarajte sa Anom</button>
+          <a class="btn btn-ghost" href="#" data-zakazi>Zakažite razgovor</a>
+        </div>
+        <p class="small">Demo razgovor iz browsera: do 5 minuta, najviše 2 razgovora dnevno. Potreban je mikrofon.</p>
+      </div>
+
+      <aside class="summary" aria-label="Primer rezimea poziva">
+        <header><strong>Rezime poziva</strong><span>danas, 18:42 · 3 min 12 s</span></header>
+        <dl>
+          <dt>Pozivalac</dt><dd>Jelena Marković</dd>
+          <dt>Telefon</dt><dd>064 1•• ••67 <span class="tag ok">potvrđen</span></dd>
+          <dt>Vrsta poziva</dt><dd>Novi predmet</dd>
+          <dt>Oblast</dt><dd>Porodično pravo · razvod i starateljstvo</dd>
+          <dt>Druga strana</dt><dd>Dragan Marković <span class="tag ok">potvrđeno</span></dd>
+          <dt>Sud</dt><dd>Beograd · postupak nije pokrenut</dd>
+          <dt>Hitnost</dt><dd>Normalno</dd>
+          <dt>Termin</dt><dd>Utorak, posle 14 časova</dd>
+          <dt>Sledeći korak</dt><dd>Potvrditi termin konsultacija</dd>
+        </dl>
+        <footer>Primer reda iz tabele poziva koju kancelarija vidi</footer>
+      </aside>
+    </div>
+  </header>
+
+  <section id="kako-funkcionise" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kako funkcioniše</span>
+        <h2>Broj kancelarije ostaje isti. Propušteni pozivi više ne postoje.</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Preusmeravanje poziva</h3>
+          <p>Kod vašeg operatera uključuje se preusmeravanje kada se niko ne javi posle 20 sekundi ili je linija zauzeta.
+            Klijenti i dalje zovu broj koji već poznaju.</p>
+        </div>
+        <div class="step">
+          <h3>Razgovor u ime kancelarije</h3>
+          <p>Ana se javlja u ime kancelarije, predstavlja se kao virtuelna asistentkinja i vodi razgovor prema pravilima
+            vaše kancelarije: oblastima rada, radnom vremenu, ceni konsultacija.</p>
+        </div>
+        <div class="step">
+          <h3>Sve u kalendaru i tabeli</h3>
+          <p>Dogovorene konsultacije upisuju se direktno u kalendar advokata, a svaki poziv kao novi red u tabelu
+            (Google Sheets) koju kancelarija vidi u svakom trenutku.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tokom-poziva">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Tokom poziva</span>
+        <h2>Šta Ana radi za vašu kancelariju</h2>
+        <p class="lead">Svaki razgovor vodi kao iskusna sekretarica: postavlja jedno pitanje odjednom, potvrđuje ono što je
+          čula i ne pita ponovo ono što je klijent već rekao.</p>
+      </div>
+      <div class="features">
+        <div class="feature"><span class="line"></span><h3>Kvalifikuje nove predmete</h3>
+          <p>Utvrđuje oblast prava, kratak opis slučaja, grad ili nadležni sud, kao i rokove i zakazana ročišta.</p></div>
+        <div class="feature"><span class="line"></span><h3>Proverava sukob interesa</h3>
+          <p>Traži i izričito potvrđuje puno ime druge strane, fizičkog lica ili privrednog društva, pre zakazivanja.</p></div>
+        <div class="feature"><span class="line"></span><h3>Zakazuje konsultacije</h3>
+          <p>Navodi cenu i trajanje konsultacija, nudi slobodne termine iz kalendara advokata i potvrđuje dogovoreni termin.</p></div>
+        <div class="feature"><span class="line"></span><h3>Prosleđuje hitne slučajeve</h3>
+          <p>Hapšenje i zadržavanje, pretres, ročište ili rok danas ili sutra, nasilje u porodici: poziv se odmah prebacuje
+            na mobilni telefon advokata.</p></div>
+        <div class="feature"><span class="line"></span><h3>Uzima poruke za advokate</h3>
+          <p>Postojeći klijenti ostavljaju poruku određenom advokatu. Podaci o predmetima se nikome ne iznose.</p></div>
+        <div class="feature"><span class="line"></span><h3>Odgovara na pitanja</h3>
+          <p>Radno vreme, adresa, oblasti rada i cena konsultacija, isključivo prema podacima koje kancelarija odobri.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="diskrecija" class="alt">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">Šta beleži</span>
+        <h2>Svaki poziv, jedan red u tabeli</h2>
+        <p class="muted">Advokat ne mora da preslušava razgovor. Podaci se automatski upisuju u tabelu kancelarije,
+          uređeni i sa potvrđenim brojem telefona.</p>
+        <dl class="fields">
+          <div><dt>Ime i prezime</dt><dd>pozivaoca</dd></div>
+          <div><dt>Broj telefona</dt><dd>ponovljen i potvrđen</dd></div>
+          <div><dt>Vrsta poziva</dt><dd>novi predmet, postojeći klijent, informacija</dd></div>
+          <div><dt>Oblast prava</dt><dd>i kratak opis slučaja</dd></div>
+          <div><dt>Druga strana</dt><dd>za proveru sukoba interesa</dd></div>
+          <div><dt>Grad ili sud</dt><dd>gde se predmet vodi</dd></div>
+          <div><dt>Hitnost</dt><dd>rokovi i ročišta</dd></div>
+          <div><dt>Termin</dt><dd>dogovoren ili željeni</dd></div>
+          <div><dt>Kome je poruka</dt><dd>advokat kancelarije</dd></div>
+          <div><dt>Sledeći korak</dt><dd>šta kancelarija treba da uradi</dd></div>
+        </dl>
+      </div>
+      <div>
+        <span class="eyebrow">Diskrecija</span>
+        <h2>Pravila kojih se Ana uvek drži</h2>
+        <ul class="rules">
+          <li><strong>Ne daje pravne savete</strong><span>Ne procenjuje izglede u sporu i ne tumači propise; to prepušta advokatu na konsultacijama.</span></li>
+          <li><strong>Čuva poverljivost</strong><span>Ne potvrđuje niti poriče da je neko klijent kancelarije i ne govori o predmetima.</span></li>
+          <li><strong>Poštuje vaša ograničenja</strong><span>Predmete koje kancelarija ne preuzima ljubazno odbija, bez trošenja vašeg vremena.</span></li>
+          <li><strong>Transparentna je</strong><span>Na početku se predstavlja kao virtuelna asistentkinja i obaveštava da se razgovor beleži.</span></li>
+          <li><strong>Bez audio snimaka</strong><span>Razgovor se ne snima; podaci o pozivu upisuju se samo u tabelu vaše kancelarije.</span></li>
+          <li><strong>Srpski i engleski</strong><span>Ako pozivalac pređe na engleski, razgovor se nastavlja na engleskom.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo">
+    <div class="wrap">
+      <div class="demo">
+        <span class="eyebrow">Demo</span>
+        <h2>Razgovarajte sa Anom</h2>
+        <p class="muted">Ana se javlja u ime izmišljene kancelarije. Pričajte prirodno, prekidajte je i menjajte temu.
+          Evo nekoliko situacija koje možete da isprobate:</p>
+        <ul class="scenarios">
+          <li><b>Novi predmet</b><span>„Želim razvod, suprug se ne slaže oko starateljstva nad decom."</span></li>
+          <li><b>Hitan slučaj</b><span>„Brat mi je upravo uhapšen, treba nam advokat odmah."</span></li>
+          <li><b>Postojeći klijent</b><span>„Ostavio bih poruku advokatici Jovanović."</span></li>
+          <li><b>Poverljivost</b><span>„Da li vaša kancelarija zastupa Zorana Petrovića?"</span></li>
+          <li><b>Pravni savet</b><span>„Recite mi samo, imam li šanse da dobijem spor?"</span></li>
+          <li><b>Predmet koji se ne preuzima</b><span>„Hoću da tužim banku zbog kredita."</span></li>
+        </ul>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-pozovi>Započnite razgovor</button>
+          <a class="btn btn-ghost" href="#" data-zakazi>Zakažite razgovor sa nama</a>
+        </div>
+        <p class="small" id="napomena" aria-live="polite">Razgovor ide preko browsera i traje najviše 5 minuta. Dozvolite pristup mikrofonu; najbolje je sa slušalicama.</p>
+        <div class="firm muted">
+          Izmišljena kancelarija: Advokatska kancelarija Test, Knez Mihailova 1, Beograd · ponedeljak–petak od 9 do 17 časova ·
+          advokati Petar Petrović (krivično pravo, prekršaji) i Jelena Jovanović (porodično, nasledno i radno pravo) ·
+          konsultacije 6.000 dinara, do 45 minuta · ne preuzima predmete protiv banaka.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pitanja">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Pitanja</span>
+        <h2>Česta pitanja</h2>
+      </div>
+      <details><summary>Da li kancelarija mora da menja broj telefona?</summary>
+        <p>Ne. Kod operatera se uključuje preusmeravanje poziva kada se niko ne javi posle 20 sekundi ili je linija zauzeta.
+          Klijenti zovu isti broj kao i do sada.</p></details>
+      <details><summary>Da li klijent zna da razgovara sa veštačkom inteligencijom?</summary>
+        <p>Da. Ana se na početku razgovora predstavlja kao virtuelna asistentkinja kancelarije.</p></details>
+      <details><summary>Šta se dešava kada je slučaj hitan?</summary>
+        <p>Ana hitnu situaciju prepoznaje u bilo kom trenutku razgovora i odmah prebacuje poziv na mobilni telefon advokata.
+          Ako se advokat ne javi, uzima najvažnije podatke, a poziv se u tabeli označava kao hitan.</p></details>
+      <details><summary>Kako se zakazuju konsultacije?</summary>
+        <p>Ana nudi slobodne termine iz kalendara advokata (Google ili Outlook) i upisuje dogovoreni termin.
+          Kancelarija zadržava punu kontrolu nad rasporedom.</p></details>
+      <details><summary>Da li se razgovori snimaju?</summary>
+        <p>Ne. Svaki poziv se upisuje kao red u tabelu vaše kancelarije: ko je zvao, zbog čega, broj za povratni
+          poziv i šta je sledeći korak.</p></details>
+      <details><summary>Koliko traje uvođenje?</summary>
+        <p>Podešavanje za vašu kancelariju (advokati, oblasti, radno vreme, cene, pravila) i uključivanje preusmeravanja
+          obavljaju se u nekoliko dana.</p></details>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="wrap">
+      <span>© 2026 Callsistent · Test verzija · <a href="../">AI recepcija</a> · <a href="../bolnice/">Za bolnice i klinike</a> · <a href="#" id="kolacici">Podešavanja kolačića</a></span>
+      <span>Sajt štiti reCAPTCHA; važe Google <a href="https://policies.google.com/privacy">Politika privatnosti</a> i
+        <a href="https://policies.google.com/terms">Uslovi korišćenja</a>.</span>
+    </div>
+  </footer>
+
+  <div class="consent" id="consent" hidden>
+    <p>Koristimo kolačiće za merenje uspešnosti oglasa (Meta Pixel). Bez vaše saglasnosti ništa ne merimo.</p>
+    <div class="actions">
+      <button class="btn btn-ghost" type="button" id="consent-ne">Odbijam</button>
+      <button class="btn btn-primary" type="button" id="consent-da">Prihvatam</button>
+    </div>
+  </div>
+
+  <script src="../assets/saglasnost.js"></script>
+  <script src="../assets/zakazivanje.js"></script>
+
+  <div class="callbar" id="callbar" hidden>
+    <span class="dot" aria-hidden="true"></span>
+    <span id="callbar-status">Povezivanje…</span>
+    <span class="time" id="callbar-time">00:00 / 05:00</span>
+    <button class="btn" type="button" id="callbar-end">Završi</button>
+  </div>
+
+  <script>
+    // v2: najviše 5 minuta po razgovoru + upis poziva u Google tabelu. Svaki novi publish u Retell-u ⇒ povećati verziju.
+    window.CS_DEMO = { agentId: "agent_29fc33afe76037882eb0c1826e", agentVersion: 2, vertikala: "advokati" };
+  </script>
+  <script type="module" src="../assets/demo.js"></script>
 </body>
 </html>
