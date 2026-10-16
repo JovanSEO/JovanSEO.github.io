@@ -104,6 +104,8 @@ const napomena = document.getElementById("napomena");
 const naslovStranice = document.title;
 const client = new RetellClient({ key: PUBLIC_KEY });
 let izabrana = podrazumevana, poziv = null, tajmer = null, pocetak = 0, zauzeto = false;
+// Ko govori: meri se jačina Aninog zvuka u browseru (Retell signali za početak/kraj govora ne stižu uvek).
+let anaGovori = false, zadnjiGlas = 0;
 
 dlg.querySelectorAll("[data-zakazi-demo]").forEach((el) => {
   if (window.csPoveziZakazivanje) window.csPoveziZakazivanje(el); else el.remove();
@@ -173,8 +175,16 @@ function status(tekst, kratko, govori) {
   dlg.dataset.govori = govori;
 }
 
+function oznaciGovor(ana) {
+  if (ana === anaGovori) return;
+  anaGovori = ana;
+  if (ana) status("Ana govori…", "Ana govori", "ana");
+  else status("Vaš red, govorite.", "Slušam vas", "vi");
+}
+
 function zavrseno() {
   clearInterval(tajmer);
+  anaGovori = false;
   bar.hidden = true;
   fab.hidden = false;
   poziv = null;
@@ -223,6 +233,7 @@ async function zapocni() {
     agent_id: agent.agentId,
     agent_version: agent.agentVersion,
     recaptchaToken: token,
+    audio: { emitRawAudioSamples: true },
     hooks: {
       onStatus: (s) => {
         if (s !== "live" || ziv) return;
@@ -238,10 +249,17 @@ async function zapocni() {
           $(".cs-traka span").style.width = Math.min(100, (s / MAX_SEKUNDI) * 100) + "%";
           bar.querySelector(".cs-bar-sat").textContent = prikaz;
           if (s > MAX_SEKUNDI + 10 && poziv) poziv.end();
-        }, 500);
+          if (anaGovori && Date.now() - zadnjiGlas > 800) oznaciGovor(false);
+        }, 250);
       },
-      onAgentStartTalking: () => { if (ziv) status("Ana govori…", "Ana govori", "ana"); },
-      onAgentStopTalking: () => { if (ziv) status("Vaš red, govorite.", "Slušam vas", "vi"); },
+      onAgentStartTalking: () => { if (ziv) { zadnjiGlas = Date.now(); oznaciGovor(true); } },
+      onAgentStopTalking: () => { if (ziv) oznaciGovor(false); },
+      onAudio: (uzorci) => {
+        if (!ziv) return;
+        let zbir = 0;
+        for (let i = 0; i < uzorci.length; i += 4) zbir += uzorci[i] * uzorci[i];
+        if (Math.sqrt(zbir / (uzorci.length / 4)) > 0.01) { zadnjiGlas = Date.now(); oznaciGovor(true); }
+      },
       onError: (err) => {
         const t = String(err && err.message || err).toLowerCase();
         zavrseno();
