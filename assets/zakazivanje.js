@@ -1,7 +1,7 @@
-// Link za zakazivanje razgovora (Google Calendar stranica za zakazivanje „Callsistent konsultacije").
-// Dok je prazan, dugmad za zakazivanje se ne prikazuju.
+// Link za zakazivanje razgovora: Google Calendar stranica „1:1 call" na jovanseo@gmail.com
+// (30 min, pon–pet 8–17, sredom 8–19, Beograd). Ako je prazan, dugmad za zakazivanje se ne prikazuju.
 (function () {
-  var ZAKAZIVANJE_URL = "";
+  var ZAKAZIVANJE_URL = "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3VGLSACoMaoPwlDbVXYXfdmKRaeWw2TR6o38QtQz9BN17usa65XrH_b4eftvBQXhlyejM2B6Qw";
 
   document.querySelectorAll("[data-zakazi]").forEach(function (el) {
     if (!ZAKAZIVANJE_URL) { el.closest("li") ? el.closest("li").remove() : el.remove(); return; }
