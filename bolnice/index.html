@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Callsistent – AI recepcija za bolnice i klinike</title>
+  <meta name="description" content="Callsistent preuzima pozive na koje prijem bolnice ili klinike ne stigne da odgovori: zakazuje, pomera i otkazuje preglede, odgovara na pitanja pacijenata i hitne slučajeve odmah usmerava." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0f2a44" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" />
+  <link rel="stylesheet" href="../assets/style.css" />
+
+  <!-- Zaštita od spama: Google reCAPTCHA v3 (nevidljiva; site key je javan, secret key je samo u Retell-u). -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"></script>
+
+  <!-- Meta Pixel „Callsistent – sajt". Ne šalje ništa dok posetilac ne prihvati kolačiće (fbq consent). -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('consent', 'revoke');
+    fbq('init', '2196038948458091');
+    fbq('track', 'PageView');
+  </script>
+
+</head>
+<body>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="../" aria-label="Callsistent – početna">
+        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M47.6 16.4A22 22 0 1 0 47.6 47.6" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="49" cy="32" r="4.5" style="fill: var(--accent)"/>
+        </svg>
+        <b>Callsistent</b>
+      </a>
+      <ul>
+        <li class="hide-sm"><a href="#kako-funkcionise">Kako funkcioniše</a></li>
+        <li class="hide-sm"><a href="#tokom-poziva">Tokom poziva</a></li>
+        <li class="hide-sm"><a href="#privatnost">Privatnost</a></li>
+        <li class="hide-sm"><a href="#pitanja">Pitanja</a></li>
+        <li class="hide-sm"><a href="#" data-zakazi>Zakažite razgovor</a></li>
+        <li><a class="btn btn-primary" href="#demo">Isprobajte</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">AI recepcija za bolnice i klinike</span>
+        <h1>Pacijenti dobijaju odgovor i kada je prijem zauzet.</h1>
+        <p class="lead">Callsistent preuzima pozive na koje vaš prijem ne stigne da odgovori. Razgovara sa pacijentima na srpskom,
+          zakazuje, pomera i otkazuje preglede, odgovara na pitanja o cenama i pripremi, a hitne slučajeve odmah
+          usmerava.</p>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-pozovi>Razgovarajte sa Anom</button>
+          <a class="btn btn-ghost" href="#" data-zakazi>Zakažite razgovor</a>
+        </div>
+        <p class="small">Demo razgovor iz browsera: do 5 minuta, najviše 2 razgovora dnevno. Potreban je mikrofon.</p>
+      </div>
+
+      <aside class="summary" aria-label="Primer rezimea poziva">
+        <header><strong>Rezime poziva</strong><span>danas, 19:58 · 2 min 41 s</span></header>
+        <dl>
+          <dt>Pacijent</dt><dd>Milan Stojanović</dd>
+          <dt>Datum rođenja</dt><dd>12. 3. 1961.</dd>
+          <dt>Telefon</dt><dd>063 4•• ••21 <span class="tag ok">potvrđen</span></dd>
+          <dt>Vrsta poziva</dt><dd>Novi pregled</dd>
+          <dt>Specijalnost</dt><dd>Kardiologija · prvi pregled</dd>
+          <dt>Lekar</dt><dd>dr Marko Nikolić</dd>
+          <dt>Plaćanje</dt><dd>Dobrovoljno osiguranje</dd>
+          <dt>Termin</dt><dd>Sreda, pre podne</dd>
+          <dt>Sledeći korak</dt><dd>Potvrditi termin pacijentu</dd>
+        </dl>
+        <footer>Primer reda iz tabele poziva koju ustanova vidi</footer>
+      </aside>
+    </div>
+  </header>
+
+  <section id="kako-funkcionise" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kako funkcioniše</span>
+        <h2>Broj ustanove ostaje isti. Pacijenti više ne slušaju zauzeto.</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Preusmeravanje poziva</h3>
+          <p>Kod vašeg operatera uključuje se preusmeravanje kada je prijem zauzet, kada se niko ne javi posle 20 sekundi
+            ili posle radnog vremena. Pacijenti i dalje zovu broj koji već poznaju.</p>
+        </div>
+        <div class="step">
+          <h3>Razgovor u ime ustanove</h3>
+          <p>Ana se javlja u ime bolnice ili klinike, predstavlja se kao virtuelna asistentkinja i vodi razgovor prema
+            vašim pravilima: specijalnostima, lekarima, radnom vremenu, cenovniku i osiguranju.</p>
+        </div>
+        <div class="step">
+          <h3>Sve u kalendaru i tabeli</h3>
+          <p>Zahtevi za preglede stižu sa svim podacima, a svaki poziv postaje novi red u tabeli (Google Sheets) koju
+            prijem vidi u svakom trenutku.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tokom-poziva">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Tokom poziva</span>
+        <h2>Šta Ana radi za vašu ustanovu</h2>
+        <p class="lead">Razgovara smireno i strpljivo, kao iskusna sestra na prijemu: postavlja jedno pitanje odjednom,
+          potvrđuje ono što je čula i ne pita ponovo ono što je pacijent već rekao.</p>
+      </div>
+      <div class="features">
+        <div class="feature"><span class="line"></span><h3>Zakazuje preglede</h3>
+          <p>Specijalnost ili usluga, željeni lekar, prvi pregled ili kontrola, plaćanje ili polisa osiguranja i termin koji pacijentu odgovara.</p></div>
+        <div class="feature"><span class="line"></span><h3>Pomera i otkazuje termine</h3>
+          <p>Beleži stari i novi termin, a otkazane termine odmah javlja prijemu, pa se mesto može ponuditi drugom pacijentu.</p></div>
+        <div class="feature"><span class="line"></span><h3>Odgovara na pitanja</h3>
+          <p>Radno vreme, adresa, lekari, cene pregleda, osiguranje i priprema (natašte, šta poneti), isključivo prema podacima ustanove.</p></div>
+        <div class="feature"><span class="line"></span><h3>Prima zahteve za nalaze</h3>
+          <p>Zahtevi za nalaze, izveštaje, recepte i upute idu osoblju. Rezultate nikada ne saopštava telefonom.</p></div>
+        <div class="feature"><span class="line"></span><h3>Usmerava hitne slučajeve</h3>
+          <p>Bol u grudima, otežano disanje, znaci moždanog udara: pacijenta odmah upućuje na 194 i povezuje sa dežurnim osobljem.</p></div>
+        <div class="feature"><span class="line"></span><h3>Uzima poruke za lekare</h3>
+          <p>Pacijenti i članovi porodice ostavljaju poruku određenom lekaru ili odeljenju, sa brojem za povratni poziv.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="privatnost" class="alt">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">Šta beleži</span>
+        <h2>Svaki poziv, jedan red u tabeli</h2>
+        <p class="muted">Prijem ne mora da preslušava razgovor. Podaci se automatski upisuju u tabelu ustanove,
+          uređeni i sa potvrđenim brojem telefona.</p>
+        <dl class="fields">
+          <div><dt>Ime i prezime</dt><dd>pacijenta</dd></div>
+          <div><dt>Datum rođenja</dt><dd>radi pronalaženja kartona</dd></div>
+          <div><dt>Ko zove</dt><dd>pacijent ili član porodice</dd></div>
+          <div><dt>Broj telefona</dt><dd>ponovljen i potvrđen</dd></div>
+          <div><dt>Vrsta poziva</dt><dd>novi pregled, promena, otkazivanje, nalaz</dd></div>
+          <div><dt>Specijalnost</dt><dd>ili usluga, na primer ultrazvuk</dd></div>
+          <div><dt>Lekar</dt><dd>ako ga pacijent traži</dd></div>
+          <div><dt>Plaćanje</dt><dd>samostalno ili polisa osiguranja</dd></div>
+          <div><dt>Termin</dt><dd>željeni dan i doba dana</dd></div>
+          <div><dt>Sledeći korak</dt><dd>šta prijem treba da uradi</dd></div>
+        </dl>
+      </div>
+      <div>
+        <span class="eyebrow">Privatnost</span>
+        <h2>Pravila kojih se Ana uvek drži</h2>
+        <ul class="rules">
+          <li><strong>Ne daje medicinske savete</strong><span>Ne tumači simptome ni nalaze i ne preporučuje lekove; to prepušta lekaru i nudi pregled.</span></li>
+          <li><strong>Ne saopštava nalaze</strong><span>Rezultati se nikada ne čitaju telefonom; zahtev ide osoblju.</span></li>
+          <li><strong>Čuva poverljivost</strong><span>Ne potvrđuje da je neko pacijent ustanove i ne govori o tuđem lečenju.</span></li>
+          <li><strong>Hitno znači 194</strong><span>Kod stanja opasnih po život odmah upućuje na Hitnu pomoć i povezuje sa dežurnim osobljem.</span></li>
+          <li><strong>Transparentna je</strong><span>Na početku se predstavlja kao virtuelna asistentkinja i obaveštava da se razgovor beleži.</span></li>
+          <li><strong>Bez audio snimaka</strong><span>Razgovor se ne snima; podaci o pozivu upisuju se samo u tabelu vaše ustanove.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo">
+    <div class="wrap">
+      <div class="demo">
+        <span class="eyebrow">Demo</span>
+        <h2>Razgovarajte sa Anom</h2>
+        <p class="muted">Ana se javlja u ime izmišljene bolnice. Pričajte prirodno, prekidajte je i menjajte temu.
+          Evo nekoliko situacija koje možete da isprobate:</p>
+        <ul class="scenarios">
+          <li><b>Zakazivanje</b><span>„Treba mi pregled kod kardiologa, imam polisu osiguranja."</span></li>
+          <li><b>Pomeranje termina</b><span>„Imam ultrazvuk u četvrtak, može li sledeće nedelje?"</span></li>
+          <li><b>Nalazi</b><span>„Da li su mi gotovi rezultati krvi?"</span></li>
+          <li><b>Cena i priprema</b><span>„Koliko košta magnetna i da li dolazim natašte?"</span></li>
+          <li><b>Hitan slučaj</b><span>„Ocu je pozlilo, steže ga u grudima."</span></li>
+          <li><b>Medicinski savet</b><span>„Koji lek da pijem za pritisak?"</span></li>
+        </ul>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-pozovi>Započnite razgovor</button>
+          <a class="btn btn-ghost" href="#" data-zakazi>Zakažite razgovor sa nama</a>
+        </div>
+        <p class="small" id="napomena" aria-live="polite">Razgovor ide preko browsera i traje najviše 5 minuta. Dozvolite pristup mikrofonu; najbolje je sa slušalicama.</p>
+        <div class="firm muted">
+          Izmišljena ustanova: Bolnica Test, Bulevar kralja Aleksandra 100, Beograd · ambulante radnim danima od 7 do 20
+          i subotom od 8 do 14 časova · kardiologija, ginekologija, ortopedija, pedijatrija, dermatologija, neurologija,
+          ultrazvuk, magnetna rezonanca i laboratorija · specijalistički pregled 6.000 dinara · primaju se polise
+          dobrovoljnog osiguranja, ne radi se preko RFZO uputa.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pitanja">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Pitanja</span>
+        <h2>Česta pitanja</h2>
+      </div>
+      <details><summary>Da li ustanova mora da menja broj telefona?</summary>
+        <p>Ne. Kod operatera se uključuje preusmeravanje poziva kada je prijem zauzet, kada se niko ne javi ili posle
+          radnog vremena. Pacijenti zovu isti broj kao i do sada.</p></details>
+      <details><summary>Da li pacijent zna da razgovara sa veštačkom inteligencijom?</summary>
+        <p>Da. Ana se na početku razgovora predstavlja kao virtuelna asistentkinja ustanove.</p></details>
+      <details><summary>Šta se dešava kada je slučaj hitan?</summary>
+        <p>Ana stanje opasno po život prepoznaje u bilo kom trenutku razgovora, upućuje pozivaoca na Hitnu pomoć (194)
+          i odmah prebacuje poziv dežurnom osoblju. Ako se niko ne javi, uzima najvažnije podatke, a poziv se u
+          tabeli označava kao hitan.</p></details>
+      <details><summary>Kako se zakazuju pregledi?</summary>
+        <p>Ana beleži specijalnost, lekara, način plaćanja i termin koji pacijentu odgovara, a prijem potvrđuje tačan
+          termin. Uz povezivanje sa vašim kalendarom, termini se mogu upisivati i direktno.</p></details>
+      <details><summary>Kako se čuvaju zdravstveni podaci?</summary>
+        <p>Razgovori se ne snimaju. Podaci o pozivu upisuju se samo u tabelu vaše ustanove, a Ana ne saopštava nalaze i
+          ne govori o lečenju drugih pacijenata. Obradu uređujemo ugovorom u skladu sa Zakonom o zaštiti podataka o ličnosti.</p></details>
+      <details><summary>Koliko traje uvođenje?</summary>
+        <p>Podešavanje za vašu ustanovu (specijalnosti, lekari, radno vreme, cenovnik, osiguranje, pravila) i
+          uključivanje preusmeravanja obavljaju se u nekoliko dana.</p></details>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="wrap">
+      <span>© 2026 Callsistent · Test verzija · <a href="../">AI recepcija</a> · <a href="../advokati/">Za advokatske kancelarije</a> · <a href="#" id="kolacici">Podešavanja kolačića</a></span>
+      <span>Sajt štiti reCAPTCHA; važe Google <a href="https://policies.google.com/privacy">Politika privatnosti</a> i
+        <a href="https://policies.google.com/terms">Uslovi korišćenja</a>.</span>
+    </div>
+  </footer>
+
+  <div class="consent" id="consent" hidden>
+    <p>Koristimo kolačiće za merenje uspešnosti oglasa (Meta Pixel). Bez vaše saglasnosti ništa ne merimo.</p>
+    <div class="actions">
+      <button class="btn btn-ghost" type="button" id="consent-ne">Odbijam</button>
+      <button class="btn btn-primary" type="button" id="consent-da">Prihvatam</button>
+    </div>
+  </div>
+
+  <script src="../assets/saglasnost.js"></script>
+  <script src="../assets/zakazivanje.js"></script>
+
+  <div class="callbar" id="callbar" hidden>
+    <span class="dot" aria-hidden="true"></span>
+    <span id="callbar-status">Povezivanje…</span>
+    <span class="time" id="callbar-time">00:00 / 05:00</span>
+    <button class="btn" type="button" id="callbar-end">Završi</button>
+  </div>
+
+  <script>
+    // v0: šablon za bolnice (retell/sablon_bolnice.py). Svaki novi publish u Retell-u ⇒ povećati verziju.
+    window.CS_DEMO = { agentId: "agent_70e1c03b54d30e103e02051677", agentVersion: 0, vertikala: "bolnice" };
+  </script>
+  <script type="module" src="../assets/demo.js"></script>
+</body>
+</html>
