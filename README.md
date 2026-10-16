@@ -1,8 +1,8 @@
 # Halo AI
 
-Test sajt za Halo AI – AI recepcionistu na srpskom.
+Sajt za Halo AI – AI recepcionistkinju za advokatske kancelarije (srpski).
 
-- `/` – početna (AI recepcionista, sve delatnosti)
-- `/advokati/` – demo za advokatske kancelarije sa test pozivom (Retell widget)
+- `/` – one-pager za advokate sa demo pozivom (Retell widget, reCAPTCHA v3)
+- `/advokati/` – preusmerava na početnu
 
 Izvor se održava u projektu „AI Recepcija“ (folder `sajt/`).
