@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" />
-  <link rel="stylesheet" href="../assets/style.css" />
+  <link rel="stylesheet" href="../assets/style.css?v=3" />
 
   <!-- Zaštita od spama: Google reCAPTCHA v3 (nevidljiva; site key je javan, secret key je samo u Retell-u). -->
   <script src="https://www.google.com/recaptcha/api.js?render=6LcTAPItAAAAABtRYdIurPnWBzrIOlFyS_unxXpr"></script>
@@ -240,7 +240,7 @@
     </div>
   </div>
 
-  <script src="../assets/saglasnost.js"></script>
+  <script src="../assets/saglasnost.js?v=3"></script>
   <script src="../assets/zakazivanje.js"></script>
 
   <div class="callbar" id="callbar" hidden>
@@ -251,9 +251,9 @@
   </div>
 
   <script>
-    // v0: šablon za bolnice (retell/sablon_bolnice.py). Svaki novi publish u Retell-u ⇒ povećati verziju.
-    window.CS_DEMO = { agentId: "agent_70e1c03b54d30e103e02051677", agentVersion: 0, vertikala: "bolnice" };
+    // Delatnost za dugmad „Demo poziv" na ovoj stranici; agenti i njihove verzije su u assets/demo.js.
+    window.CS_DEMO = { vertikala: "bolnice" };
   </script>
-  <script type="module" src="../assets/demo.js"></script>
+  <script type="module" src="../assets/demo.js?v=3"></script>
 </body>
 </html>
