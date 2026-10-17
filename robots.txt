@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /oglasi/
+
+Sitemap: https://callsistent.com/sitemap.xml
