@@ -365,3 +365,13 @@ a.cs-pozovi { text-decoration: none; margin-bottom: 10px; }
 }
 @media (max-width: 520px) { .zakazi-fab { left: 12px; bottom: 12px; } }
 @media (max-width: 400px) { .zakazi-fab-vise { display: none; } }
+
+/* Politika privatnosti (privatnost/) */
+.pravno { padding: 56px 0 72px; }
+.pravno .wrap { max-width: 760px; }
+.pravno h1 { font-size: clamp(34px, 5vw, 48px); margin: 8px 0 6px; }
+.pravno h2 { font-size: 24px; margin: 36px 0 10px; }
+.pravno p, .pravno li { font-size: 16.5px; line-height: 1.65; }
+.pravno ul { padding-left: 20px; margin: 8px 0 0; }
+.pravno li + li { margin-top: 6px; }
+.cs-sitno a { color: inherit; }

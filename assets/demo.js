@@ -60,7 +60,8 @@ const dlg = element(
       '</div>' +
       '<p class="cs-poruka" aria-live="polite"></p>' +
       `<button type="button" class="cs-pozovi" data-akcija="pozovi">${PHONE}<span>Pozovi</span></button>` +
-      '<p class="cs-sitno">Najviše 3 minuta po razgovoru. Najbolje sa slušalicama.</p>' +
+      '<p class="cs-sitno">Najviše 3 minuta po razgovoru. Najbolje sa slušalicama. Korišćenjem demo asistenta prihvatate ' +
+        '<a href="/privatnost/" target="_blank">Politiku privatnosti</a>.</p>' +
       '<p class="cs-sitno cs-nalog" hidden></p>' +
       '<a class="cs-zakazi-link" href="#" data-zakazi-demo>Radije biste razgovarali sa nama? Zakažite razgovor</a>' +
     '</div>' +
@@ -77,7 +78,8 @@ const dlg = element(
         '<span>Pošaljite mi ponudu i novosti o Callsistentu. Možete se odjaviti kad god želite.</span></label>' +
       '<p class="cs-poruka" aria-live="polite"></p>' +
       '<button type="submit" class="cs-pozovi"><span>Pošalji kod</span></button>' +
-      '<p class="cs-sitno">Mejl koristimo za potvrdu i da vas kontaktiramo povodom demo poziva. Ne delimo ga sa drugima.</p>' +
+      '<p class="cs-sitno">Klikom na „Pošalji kod" i korišćenjem demo asistenta prihvatate <a href="/privatnost/" target="_blank">Politiku privatnosti</a> ' +
+        'i saglasni ste da podatke iz prijave i razgovora koristimo u svrhe navedene u njoj. U razgovoru ne navodite stvarne poverljive podatke.</p>' +
       '<button type="button" class="cs-veza" data-akcija="nazad">Nazad</button>' +
     '</form>' +
 
