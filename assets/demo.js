@@ -52,7 +52,7 @@ const dlg = element(
     '<div class="cs-korak" data-korak="izbor">' +
       '<span class="eyebrow">Demo poziv</span>' +
       '<h2>Razgovarajte sa Anom</h2>' +
-      '<p class="cs-uvod">Izaberite koga Ana zastupa, pa kliknite „Pozovi". Razgovor ide preko browsera, potreban je samo mikrofon.</p>' +
+      '<p class="cs-uvod">Izaberite koga Ana zastupa, pa kliknite „Pozovi". Razgovor ide preko browsera; kada browser pita za mikrofon, dodirnite „Dozvoli".</p>' +
       '<div class="cs-opcije" role="radiogroup" aria-label="Delatnost">' +
         Object.entries(AGENTI).map(([k, a]) =>
           `<label class="cs-opcija"><input type="radio" name="cs-vertikala" value="${k}">` +
@@ -94,6 +94,16 @@ const dlg = element(
         '<button type="button" class="cs-veza" data-akcija="posalji-ponovo">Pošalji ponovo</button> · ' +
         '<button type="button" class="cs-veza" data-akcija="promeni-mejl">Promeni mejl</button></p>' +
     '</form>' +
+
+    '<div class="cs-korak" data-korak="mikrofon" hidden>' +
+      '<span class="eyebrow">Demo poziv</span>' +
+      '<h2>Potreban je mikrofon</h2>' +
+      '<p class="cs-uvod cs-mik-uvod"></p>' +
+      '<ol class="cs-koraci"></ol>' +
+      '<a class="cs-pozovi cs-mik-otvori" href="#" hidden><span>Otvori u Chrome-u</span></a>' +
+      `<button type="button" class="cs-pozovi cs-mik-ponovo" data-akcija="mikrofon-ponovo">${PHONE}<span>Pokušaj ponovo</span></button>` +
+      '<button type="button" class="cs-veza" data-akcija="nazad">Nazad</button>' +
+    '</div>' +
 
     '<div class="cs-korak" data-korak="poziv" hidden>' +
       '<span class="cs-uzivo"><span class="cs-tacka" aria-hidden="true"></span>Razgovor u toku</span>' +
@@ -190,7 +200,6 @@ const PORUKE = {
   limit: "Danas ste već obavili probni razgovor. Pokušajte ponovo sutra ili zakažite razgovor sa nama.",
   popunjeno: "Demo je za danas popunjen. Pokušajte sutra ili zakažite razgovor sa nama.",
   greska: "Razgovor trenutno nije mogao da počne. Pokušajte ponovo za minut.",
-  mikrofon: "Dozvolite pristup mikrofonu u browseru i pokušajte ponovo.",
 };
 function porukaZaStatus(st) {
   if (st === 429) { preostalo = 0; return PORUKE.limit; }
@@ -289,9 +298,80 @@ function prikaziGresku(tekst) {
   pokaziProzor();
 }
 
-// „Pozovi": bez prijave ide na formu; sa prijavom proverava limit i mikrofon, pa kreće razgovor.
+// Mikrofon tražimo odmah na „Pozovi" (pre prijave), da browser pokaže svoj prozorčić „Dozvoli"
+// i da posetilac ne gubi vreme na prijavu ako mikrofon ne može da radi u tom browseru.
+const UA = navigator.userAgent;
+const ANDROID = /Android/i.test(UA), IOS = /iPhone|iPad|iPod/i.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+const U_APLIKACIJI = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|Viber|Line\/|MicroMessenger|; wv\)/i.test(UA);
+let mikrofonOk = false;
+
+async function traziMikrofon() {
+  if (!navigator.mediaDevices?.getUserMedia) return "nema";
+  try {
+    const mic = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mic.getTracks().forEach((t) => t.stop());
+    mikrofonOk = true;
+    return "ok";
+  } catch (e) {
+    if (e && (e.name === "NotFoundError" || e.name === "OverconstrainedError")) return "nema-uredjaja";
+    let stanje = "";
+    try { stanje = (await navigator.permissions.query({ name: "microphone" })).state; } catch (x) {}
+    return stanje === "denied" ? "blokirano" : "odbijeno";
+  }
+}
+
+function pomocZaMikrofon(razlog) {
+  const otvori = $(".cs-mik-otvori");
+  otvori.hidden = true;
+  let uvod, koraci;
+  if (razlog === "nema-uredjaja") {
+    uvod = "Na ovom uređaju nije pronađen mikrofon. Probajte sa telefona ili priključite slušalice sa mikrofonom.";
+    koraci = [];
+  } else if (U_APLIKACIJI || razlog === "nema") {
+    uvod = "Sajt je otvoren unutar aplikacije (Facebook, Instagram, Viber…), koja ne pušta mikrofon. Otvorite ga u browseru, to traje sekund:";
+    if (ANDROID) {
+      otvori.hidden = false;
+      otvori.href = "intent://" + location.host + location.pathname + location.search +
+        "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(location.href) + ";end";
+      koraci = ["Dodirnite „Otvori u Chrome-u\" ispod.", "U Chrome-u kliknite „Pozovi\" i dodirnite „Dozvoli\"."];
+    } else if (IOS) {
+      otvori.hidden = false;
+      otvori.href = "x-safari-https://" + location.host + location.pathname + location.search;
+      otvori.querySelector("span").textContent = "Otvori u Safariju";
+      koraci = ["Dodirnite „Otvori u Safariju\" ispod (ili ⋯ gore desno → „Otvori u Safariju\").",
+        "U Safariju kliknite „Pozovi\" i dodirnite „Dozvoli\"."];
+    } else {
+      koraci = ["Otvorite callsistent.com u Chrome-u, Safariju ili Edge-u.", "Kliknite „Pozovi\" i dozvolite mikrofon."];
+    }
+  } else if (razlog === "blokirano") {
+    uvod = "Mikrofon je ranije blokiran za ovaj sajt. Uključite ga ovako:";
+    koraci = IOS
+      ? ["Dodirnite „aA\" levo od adrese sajta.", "Izaberite „Podešavanja veb-sajta\" → „Mikrofon\" → „Dozvoli\".", "Vratite se ovde i dodirnite „Pokušaj ponovo\"."]
+      : ANDROID
+      ? ["Dodirnite ikonicu levo od adrese sajta (⚙ ili katanac). Ako adrese nema (sajt otvoren iz Vibera i sl.), dodirnite ⋮ gore desno → „Otvori u Chrome-u\".", "Izaberite „Dozvole\" → „Mikrofon\" → „Dozvoli\".", "Vratite se ovde i dodirnite „Pokušaj ponovo\"."]
+      : ["Kliknite ikonicu levo od adrese sajta (katanac ili podešavanja).", "Kod „Mikrofon\" izaberite „Dozvoli\".", "Kliknite „Pokušaj ponovo\"."];
+  } else {
+    uvod = "Browser nije dobio dozvolu za mikrofon. Dodirnite „Pokušaj ponovo\" i u prozorčiću izaberite „Dozvoli\".";
+    koraci = ANDROID
+      ? ["Ako se prozorčić ne pojavi: Podešavanja telefona → Aplikacije → Chrome → Dozvole → Mikrofon → Dozvoli."]
+      : IOS
+      ? ["Ako se prozorčić ne pojavi: Podešavanja → Safari → Mikrofon → Pitaj ili Dozvoli."]
+      : ["Ako se prozorčić ne pojavi, proverite da li je mikrofon uključen u podešavanjima računara."];
+  }
+  $(".cs-mik-uvod").textContent = uvod;
+  $(".cs-koraci").innerHTML = "";
+  koraci.forEach((k) => { const li = document.createElement("li"); li.textContent = k; $(".cs-koraci").appendChild(li); });
+  $(".cs-mik-ponovo").hidden = razlog === "nema-uredjaja";
+  prikaziKorak("mikrofon");
+}
+
+// „Pozovi": prvo mikrofon, pa prijava (ako treba), pa provera limita i razgovor.
 async function pozovi() {
   if (zauzeto || !AGENTI[izabrana]) return;
+  if (!mikrofonOk) {
+    const razlog = await traziMikrofon();
+    if (razlog !== "ok") return pomocZaMikrofon(razlog);
+  }
   if (!korisnik) {
     porukaForme(formaPrijava, "");
     prikaziKorak("prijava");
@@ -304,12 +384,6 @@ async function pozovi() {
   if (odg.status === 401) { korisnik = null; osveziIzbor(); return pozovi(); }
   if (odg.status !== 200) return prikaziGresku(porukaZaStatus(odg.status));
   preostalo = odg.preostalo;
-  try {
-    const mic = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mic.getTracks().forEach((t) => t.stop());
-  } catch (e) {
-    return prikaziGresku(PORUKE.mikrofon);
-  }
   zapocni();
 }
 
@@ -432,8 +506,12 @@ async function zapocni() {
         const t = String(err && err.message || err).toLowerCase();
         zavrseno();
         if (err && err.status === 401) { korisnik = null; return prikaziGresku('Prijava je istekla. Kliknite „Pozovi" i prijavite se ponovo.'); }
-        prikaziGresku(err && err.status ? porukaZaStatus(err.status)
-          : t.includes("permission") || t.includes("notallowed") || t.includes("microphone") ? PORUKE.mikrofon : PORUKE.greska);
+        if (!(err && err.status) && (t.includes("permission") || t.includes("notallowed") || t.includes("microphone"))) {
+          mikrofonOk = false;
+          pokaziProzor();
+          return traziMikrofon().then((r) => (r === "ok" ? prikaziGresku(PORUKE.greska) : pomocZaMikrofon(r)));
+        }
+        prikaziGresku(err && err.status ? porukaZaStatus(err.status) : PORUKE.greska);
       },
       onEnd: () => {
         if (poziv !== ovaj) return;
@@ -477,6 +555,7 @@ const akcije = {
   nazad: () => otvori(),
   "posalji-ponovo": posaljiPonovo,
   "promeni-mejl": () => { prikaziKorak("prijava"); formaPrijava.email.focus(); },
+  "mikrofon-ponovo": () => { prikaziKorak("izbor"); pozovi(); },
   odjava,
 };
 [dlg, bar].forEach((el) => el.addEventListener("click", (e) => {

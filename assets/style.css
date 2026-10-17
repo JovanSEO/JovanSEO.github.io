@@ -281,6 +281,10 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
 .cs-veza { padding: 0; border: 0; background: none; font: inherit; color: var(--text); text-decoration: underline; cursor: pointer; }
 .cs-forma > .cs-veza { display: block; margin: 12px auto 0; font-size: 14px; }
 .cs-nalog { margin-top: 6px; }
+.cs-koraci { margin: 0 0 18px; padding-left: 20px; font-size: 15px; }
+.cs-koraci li + li { margin-top: 6px; }
+a.cs-pozovi { text-decoration: none; margin-bottom: 10px; }
+.cs-korak[data-korak="mikrofon"] > .cs-veza { display: block; margin: 12px auto 0; font-size: 14px; }
 
 .cs-korak[data-korak="poziv"] { text-align: center; }
 .cs-uzivo { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
