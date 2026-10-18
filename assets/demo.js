@@ -102,8 +102,9 @@ const dlg = element(
       '<h2>Potreban je mikrofon</h2>' +
       '<p class="cs-uvod cs-mik-uvod"></p>' +
       '<ol class="cs-koraci"></ol>' +
-      '<button type="button" class="cs-pozovi cs-mik-kopiraj" data-akcija="kopiraj-link" hidden><span>Kopiraj link</span></button>' +
+      '<a class="cs-pozovi cs-mik-otvori" data-akcija="otvori-browser" href="#" hidden><span>Otvori u Safariju</span></a>' +
       `<button type="button" class="cs-pozovi cs-mik-ponovo" data-akcija="mikrofon-ponovo">${PHONE}<span>Pokušaj ponovo</span></button>` +
+      '<button type="button" class="cs-veza cs-mik-kopiraj" data-akcija="kopiraj-link" hidden><span>Kopiraj link</span></button>' +
       '<button type="button" class="cs-veza" data-akcija="nazad">Nazad</button>' +
     '</div>' +
 
@@ -322,11 +323,41 @@ async function traziMikrofon() {
   }
 }
 
+// Link koji iz aplikacije otvara sajt u pravom browseru, na dodir posetioca.
+// Instagram i Threads na iPhone-u imaju svoj prelaz (pitaju „Otvoriti izvan aplikacije?"), jer x-safari-https blokiraju;
+// Facebook, Messenger, Viber… na iPhone-u puštaju x-safari-https. Android otvara Chrome preko intent://.
+function linkZaBrowser() {
+  const link = location.origin + location.pathname + location.search;
+  if (ANDROID) return "intent://" + location.host + location.pathname + location.search +
+    "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(link) + ";end";
+  if (!IOS) return "";
+  if (/Instagram/i.test(UA)) return "instagram://extbrowser/?url=" + encodeURIComponent(link);
+  if (/Barcelona/i.test(UA)) return "barcelona://extbrowser/?url=" + encodeURIComponent(link);
+  return "x-safari-" + link;
+}
+
+function upisiUputstvo(uvod, koraci) {
+  $(".cs-mik-uvod").textContent = uvod;
+  $(".cs-koraci").innerHTML = "";
+  koraci.forEach((k) => { const li = document.createElement("li"); li.textContent = k; $(".cs-koraci").appendChild(li); });
+}
+
+// Da li je browser otvoren, odavde se ne vidi. Zato posle par sekundi dodajemo ručni put,
+// za slučaj da je aplikacija blokirala prelaz (ko je prešao u browser, ovo ni ne vidi).
+function otvoriUBrowseru() {
+  setTimeout(() => {
+    const browser = IOS ? "Safari" : "Chrome";
+    upisiUputstvo(`Ako se ${browser} nije otvorio, uradite to ručno:`, [
+      IOS ? "Dodirnite ⋯ gore desno i izaberite „Otvori u spoljnom pregledaču\" (ili „Otvori u Safariju\")."
+        : "Dodirnite ⋮ gore desno i izaberite „Otvori u Chrome-u\" (ili „Otvori u pregledaču\").",
+      `Ili dodirnite „Kopiraj link\" i nalepite ga u ${IOS ? "Safari" : "Chrome"}.`,
+      `U ${IOS ? "Safariju" : "Chrome-u"} kliknite „Pozovi\" i dozvolite mikrofon.`]);
+  }, 2500);
+}
+
 function pomocZaMikrofon(razlog, ponovo) {
-  // Aplikacije (Instagram, Facebook, Viber…) ne dozvoljavaju sajtu da ih sam otvori u drugom browseru,
-  // pa dajemo uputstvo za njihov meni i dugme koje kopira link.
-  const kopiraj = $(".cs-mik-kopiraj");
-  kopiraj.hidden = true;
+  const otvori = $(".cs-mik-otvori"), kopiraj = $(".cs-mik-kopiraj");
+  otvori.hidden = kopiraj.hidden = true;
   kopiraj.querySelector("span").textContent = "Kopiraj link";
   let uvod, koraci;
   if (razlog === "nema-uredjaja") {
@@ -334,14 +365,16 @@ function pomocZaMikrofon(razlog, ponovo) {
     koraci = [];
   } else if (U_APLIKACIJI || razlog === "nema") {
     kopiraj.hidden = false;
+    const prelaz = linkZaBrowser();
+    otvori.hidden = !prelaz;
+    if (prelaz) otvori.href = prelaz;
+    otvori.querySelector("span").textContent = ANDROID ? "Otvori u Chrome-u" : "Otvori u Safariju";
     if (IOS) {
       uvod = "Ova aplikacija ne pušta mikrofon unutar sebe. Otvorite sajt u Safariju:";
-      koraci = ["Dodirnite ⋯ gore desno i izaberite „Otvori u spoljnom pregledaču\" (ili „Otvori u Safariju\").",
-        "Ili dodirnite „Kopiraj link\" ispod i nalepite ga u Safari.", "U Safariju kliknite „Pozovi\" i dozvolite mikrofon."];
+      koraci = ["Dodirnite „Otvori u Safariju\" i potvrdite.", "U Safariju kliknite „Pozovi\" i dozvolite mikrofon."];
     } else if (ANDROID) {
       uvod = "Ova aplikacija ne pušta mikrofon unutar sebe. Otvorite sajt u Chrome-u:";
-      koraci = ["Dodirnite ⋮ gore desno i izaberite „Otvori u Chrome-u\" (ili „Otvori u pregledaču\").",
-        "Ili dodirnite „Kopiraj link\" ispod i nalepite ga u Chrome.", "U Chrome-u kliknite „Pozovi\" i dozvolite mikrofon."];
+      koraci = ["Dodirnite „Otvori u Chrome-u\".", "U Chrome-u kliknite „Pozovi\" i dozvolite mikrofon."];
     } else {
       uvod = "Ovaj browser ne pušta mikrofon. Otvorite sajt u Chrome-u, Safariju, Edge-u ili Firefox-u:";
       koraci = ["Dodirnite „Kopiraj link\" i nalepite ga u drugi browser.", "Kliknite „Pozovi\" i dozvolite mikrofon."];
@@ -363,11 +396,9 @@ function pomocZaMikrofon(razlog, ponovo) {
   }
   // Bez ovoga „Pokušaj ponovo" izgleda kao da ne radi: aplikacija odbije mikrofon bez pitanja i isti ekran se vrati.
   if (ponovo && razlog !== "nema-uredjaja") uvod = "Ni ovog puta nije uspelo. " + uvod;
-  $(".cs-mik-uvod").textContent = uvod;
-  $(".cs-koraci").innerHTML = "";
-  koraci.forEach((k) => { const li = document.createElement("li"); li.textContent = k; $(".cs-koraci").appendChild(li); });
-  // U aplikaciji ponovni pokušaj ne pomaže kad mikrofon jednom odbije (ili ga uopšte nema), pa ostaje samo „Kopiraj link".
-  $(".cs-mik-ponovo").hidden = razlog === "nema-uredjaja" || razlog === "nema" || (ponovo && U_APLIKACIJI);
+  upisiUputstvo(uvod, koraci);
+  // U aplikaciji ponovni pokušaj ne pomaže (aplikacija odbije mikrofon bez pitanja), pa ostaje prelaz u browser.
+  $(".cs-mik-ponovo").hidden = razlog === "nema-uredjaja" || razlog === "nema" || U_APLIKACIJI;
   prikaziKorak("mikrofon");
 }
 
@@ -582,6 +613,7 @@ const akcije = {
   "promeni-mejl": () => { prikaziKorak("prijava"); formaPrijava.email.focus(); },
   "mikrofon-ponovo": () => { prikaziKorak("izbor"); pozovi(true); },
   "kopiraj-link": kopirajLink,
+  "otvori-browser": otvoriUBrowseru,
   odjava,
 };
 [dlg, bar].forEach((el) => el.addEventListener("click", (e) => {
