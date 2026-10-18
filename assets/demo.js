@@ -219,6 +219,7 @@ function tekstPreostalo() {
 const mmss = (s) => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
 
 function prikaziKorak(korak) {
+  if (korak !== "izbor" && korak !== dlg.dataset.stanje) zabelezi("ekran", korak);
   dlg.dataset.stanje = korak;
   dlg.querySelectorAll(".cs-korak").forEach((k) => { k.hidden = k.dataset.korak !== korak; });
 }
@@ -306,9 +307,30 @@ function prikaziGresku(tekst) {
 const UA = navigator.userAgent;
 const ANDROID = /Android/i.test(UA), IOS = /iPhone|iPad|iPod/i.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
 const U_APLIKACIJI = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|Viber|Line\/|MicroMessenger|; wv\)/i.test(UA);
-let mikrofonOk = false;
+let mikrofonOk = false, greskaMikrofona = "";
+
+// Anonimni brojač koraka (tabela `koraci`): koliko posetilaca stigne do kog ekrana i gde odustane.
+// Bez imena, mejla i kolačića; `POSETA` je nasumičan broj ovog učitavanja stranice. Šalje se u pozadini,
+// a ako ne uspe, demo radi dalje kao da brojača nema.
+const POSETA = crypto.randomUUID?.() || Date.now() + "-" + String(Math.random()).slice(2, 12);
+const UREDJAJ = IOS ? "iphone" : ANDROID ? "android" : "racunar";
+const APLIKACIJA = /Instagram/i.test(UA) ? "instagram" : /Barcelona/i.test(UA) ? "threads" : /Messenger/i.test(UA) ? "messenger"
+  : /FBAN|FBAV|FB_IAB|FBIOS/i.test(UA) ? "facebook" : U_APLIKACIJI ? "druga" : null;
+const OGLAS = /[?&](fbclid|utm_source)=/.test(location.search) || Boolean(IZVOR.utm_source);
+
+function zabelezi(dogadjaj, detalj) {
+  try {
+    fetch(SUPABASE_URL + "/rest/v1/koraci", {
+      method: "POST",
+      headers: { apikey: SUPABASE_KLJUC, "Content-Type": "application/json", Prefer: "return=minimal" },
+      body: JSON.stringify({ poseta: POSETA, dogadjaj, detalj: detalj == null || detalj === "" ? null : String(detalj).slice(0, 80),
+        stranica: location.pathname.slice(0, 60), uredjaj: UREDJAJ, aplikacija: APLIKACIJA, oglas: OGLAS }),
+    }).catch(() => {});
+  } catch (e) {}
+}
 
 async function traziMikrofon() {
+  greskaMikrofona = "";
   if (!navigator.mediaDevices?.getUserMedia) return "nema";
   try {
     const mic = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -316,6 +338,7 @@ async function traziMikrofon() {
     mikrofonOk = true;
     return "ok";
   } catch (e) {
+    greskaMikrofona = (e && e.name) || "";
     if (e && (e.name === "NotFoundError" || e.name === "OverconstrainedError")) return "nema-uredjaja";
     let stanje = "";
     try { stanje = (await navigator.permissions.query({ name: "microphone" })).state; } catch (x) {}
@@ -345,6 +368,7 @@ function upisiUputstvo(uvod, koraci) {
 // Da li je browser otvoren, odavde se ne vidi. Zato posle par sekundi dodajemo ručni put,
 // za slučaj da je aplikacija blokirala prelaz (ko je prešao u browser, ovo ni ne vidi).
 function otvoriUBrowseru() {
+  zabelezi("otvori-browser");
   setTimeout(() => {
     const browser = IOS ? "Safari" : "Chrome";
     upisiUputstvo(`Ako se ${browser} nije otvorio, uradite to ručno:`, [
@@ -403,6 +427,7 @@ function pomocZaMikrofon(razlog, ponovo) {
 }
 
 function kopirajLink() {
+  zabelezi("kopiraj-link");
   const link = location.origin + location.pathname;
   const gotovo = () => { $(".cs-mik-kopiraj span").textContent = "Link je kopiran ✓"; };
   if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(link).then(gotovo, () => rucnoKopiraj(link, gotovo));
@@ -426,6 +451,7 @@ async function pozovi(ponovo = false) {
   if (zauzeto || !AGENTI[izabrana]) return;
   if (!mikrofonOk) {
     const razlog = await traziMikrofon();
+    zabelezi("mikrofon", razlog === "ok" || !greskaMikrofona ? razlog : razlog + ":" + greskaMikrofona);
     if (razlog !== "ok") return pomocZaMikrofon(razlog, ponovo);
   }
   if (!korisnik) {
@@ -438,7 +464,7 @@ async function pozovi(ponovo = false) {
   pozoviBtn.querySelector("span").textContent = "Povezivanje…";
   const odg = await pitajServer(izabrana, true);
   if (odg.status === 401) { korisnik = null; osveziIzbor(); return pozovi(); }
-  if (odg.status !== 200) return prikaziGresku(porukaZaStatus(odg.status));
+  if (odg.status !== 200) { zabelezi("server", odg.status); return prikaziGresku(porukaZaStatus(odg.status)); }
   preostalo = odg.preostalo;
   zapocni();
 }
@@ -446,9 +472,11 @@ async function pozovi(ponovo = false) {
 async function posaljiKod(e) {
   e?.preventDefault();
   const ime = formaPrijava.ime.value.trim(), email = formaPrijava.email.value.trim().toLowerCase();
-  if (ime.length < 2) { porukaForme(formaPrijava, "Upišite ime i prezime.", true); return formaPrijava.ime.focus(); }
+  if (ime.length < 2) {
+    zabelezi("forma-greska", "ime"); porukaForme(formaPrijava, "Upišite ime i prezime.", true); return formaPrijava.ime.focus();
+  }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-    porukaForme(formaPrijava, "Proverite mejl adresu.", true); return formaPrijava.email.focus();
+    zabelezi("forma-greska", "email"); porukaForme(formaPrijava, "Proverite mejl adresu.", true); return formaPrijava.email.focus();
   }
   const dugme = formaPrijava.querySelector('[type="submit"]');
   dugme.disabled = true;
@@ -461,6 +489,7 @@ async function posaljiKod(e) {
     },
   });
   dugme.disabled = false;
+  zabelezi(error ? "kod-greska" : "kod-poslat", error?.status);
   if (error) {
     const t = String(error.message || "").toLowerCase();
     porukaForme(formaPrijava, error.status === 429 || t.includes("seconds") || t.includes("rate")
@@ -486,6 +515,7 @@ async function potvrdiKod(e) {
   porukaForme(formaKod, "Proveravamo kod…");
   const { data, error } = await sb.auth.verifyOtp({ email: emailZaKod, token: kod, type: "email" });
   dugme.disabled = false;
+  zabelezi(error || !data?.user ? "kod-pogresan" : "kod-potvrdjen");
   if (error || !data?.user) {
     porukaForme(formaKod, "Kod nije ispravan ili je istekao. Proverite ga ili pošaljite novi.", true);
     return formaKod.kod.focus();
@@ -538,6 +568,7 @@ async function zapocni() {
         ziv = true;
         if (preostalo !== null) preostalo = Math.max(0, preostalo - 1);
         if (window.fbq) fbq("trackCustom", "DemoStart", { vertikala });
+        zabelezi("poziv-povezan", vertikala);
         pocetak = Date.now();
         status("Veza je uspostavljena. Ana se javlja…", "Razgovor u toku", "ana");
         tajmer = setInterval(() => {
@@ -560,6 +591,7 @@ async function zapocni() {
       },
       onError: (err) => {
         const t = String(err && err.message || err).toLowerCase();
+        zabelezi("poziv-greska", (err && err.status) || t.slice(0, 60));
         zavrseno();
         if (err && err.status === 401) { korisnik = null; return prikaziGresku('Prijava je istekla. Kliknite „Pozovi" i prijavite se ponovo.'); }
         if (!(err && err.status) && (t.includes("permission") || t.includes("notallowed") || t.includes("microphone"))) {
@@ -572,6 +604,7 @@ async function zapocni() {
       onEnd: () => {
         if (poziv !== ovaj) return;
         const sekundi = pocetak ? Math.round((Date.now() - pocetak) / 1000) : 0;
+        zabelezi("poziv-kraj", pocetak ? sekundi : "pre-pocetka");
         if (pocetak && window.fbq) fbq("trackCustom", "DemoEnd", { vertikala, trajanje_s: sekundi });
         zavrseno();
         if (pocetak) prikaziKraj(agent, sekundi);
@@ -588,9 +621,11 @@ function zavrsi() {
 }
 
 // Dugmad na stranici delatnosti otvaraju prozor sa tom delatnošću; [data-izbor-demo] otvara izbor.
-document.querySelectorAll("[data-pozovi]").forEach((el) => el.addEventListener("click", () => otvori(podrazumevana)));
-document.querySelectorAll("[data-izbor-demo]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); otvori(); }));
-fab.querySelector(".fab-btn").addEventListener("click", () => otvori(izabrana || podrazumevana));
+// Otvaranje sa stranice (ne „Nazad" i „Ponovo" unutar prozora) se broji kao „otvoren".
+const otvoriSaStranice = (vertikala, odakle) => { zabelezi("otvoren", odakle); otvori(vertikala); };
+document.querySelectorAll("[data-pozovi]").forEach((el) => el.addEventListener("click", () => otvoriSaStranice(podrazumevana, "dugme")));
+document.querySelectorAll("[data-izbor-demo]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); otvoriSaStranice(undefined, "izbor"); }));
+fab.querySelector(".fab-btn").addEventListener("click", () => otvoriSaStranice(izabrana || podrazumevana, "plutajuce"));
 radios.forEach((r) => r.addEventListener("change", () => { izabrana = r.value; osveziIzbor(); }));
 formaPrijava.addEventListener("submit", posaljiKod);
 formaPrijava.addEventListener("input", () => porukaForme(formaPrijava, ""));
@@ -604,14 +639,14 @@ formaKod.kod.addEventListener("input", () => {
 const akcije = {
   zatvori: () => dlg.close(),
   smanji: () => dlg.close(),
-  pozovi,
+  pozovi: () => { zabelezi("pozovi", izabrana); pozovi(); },
   zavrsi,
   ponovo: () => otvori(),
   prosiri: pokaziProzor,
   nazad: () => otvori(),
   "posalji-ponovo": posaljiPonovo,
   "promeni-mejl": () => { prikaziKorak("prijava"); formaPrijava.email.focus(); },
-  "mikrofon-ponovo": () => { prikaziKorak("izbor"); pozovi(true); },
+  "mikrofon-ponovo": () => { zabelezi("mikrofon-ponovo"); prikaziKorak("izbor"); pozovi(true); },
   "kopiraj-link": kopirajLink,
   "otvori-browser": otvoriUBrowseru,
   odjava,
@@ -623,6 +658,7 @@ const akcije = {
 }));
 // Zatvaranje prozora (×, Escape, klik pored) tokom razgovora ne prekida razgovor, samo ga umanjuje u traku.
 dlg.addEventListener("close", () => {
+  zabelezi("zatvoren", zauzeto ? "poziv-u-toku" : dlg.dataset.stanje);
   document.body.classList.remove("cs-modal-open");
   if (zauzeto) bar.hidden = false;
 });
@@ -633,3 +669,4 @@ sb.auth.getSession().then(({ data: { session } }) => {
   osveziIzbor();
 });
 osveziIzbor();
+zabelezi("poseta", document.referrer ? (() => { try { return new URL(document.referrer).hostname; } catch (e) { return ""; } })() : "");
