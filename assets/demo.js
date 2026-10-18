@@ -102,7 +102,7 @@ const dlg = element(
       '<h2>Potreban je mikrofon</h2>' +
       '<p class="cs-uvod cs-mik-uvod"></p>' +
       '<ol class="cs-koraci"></ol>' +
-      '<a class="cs-pozovi cs-mik-otvori" href="#" hidden><span>Otvori u Chrome-u</span></a>' +
+      '<button type="button" class="cs-pozovi cs-mik-kopiraj" data-akcija="kopiraj-link" hidden><span>Kopiraj link</span></button>' +
       `<button type="button" class="cs-pozovi cs-mik-ponovo" data-akcija="mikrofon-ponovo">${PHONE}<span>Pokušaj ponovo</span></button>` +
       '<button type="button" class="cs-veza" data-akcija="nazad">Nazad</button>' +
     '</div>' +
@@ -323,27 +323,28 @@ async function traziMikrofon() {
 }
 
 function pomocZaMikrofon(razlog) {
-  const otvori = $(".cs-mik-otvori");
-  otvori.hidden = true;
+  // Aplikacije (Instagram, Facebook, Viber…) ne dozvoljavaju sajtu da ih sam otvori u drugom browseru,
+  // pa dajemo uputstvo za njihov meni i dugme koje kopira link.
+  const kopiraj = $(".cs-mik-kopiraj");
+  kopiraj.hidden = true;
+  kopiraj.querySelector("span").textContent = "Kopiraj link";
   let uvod, koraci;
   if (razlog === "nema-uredjaja") {
     uvod = "Na ovom uređaju nije pronađen mikrofon. Probajte sa telefona ili priključite slušalice sa mikrofonom.";
     koraci = [];
   } else if (U_APLIKACIJI || razlog === "nema") {
-    uvod = "Sajt je otvoren unutar aplikacije (Facebook, Instagram, Viber…), koja ne pušta mikrofon. Otvorite ga u browseru, to traje sekund:";
-    if (ANDROID) {
-      otvori.hidden = false;
-      otvori.href = "intent://" + location.host + location.pathname + location.search +
-        "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(location.href) + ";end";
-      koraci = ["Dodirnite „Otvori u Chrome-u\" ispod.", "U Chrome-u kliknite „Pozovi\" i dodirnite „Dozvoli\"."];
-    } else if (IOS) {
-      otvori.hidden = false;
-      otvori.href = "x-safari-https://" + location.host + location.pathname + location.search;
-      otvori.querySelector("span").textContent = "Otvori u Safariju";
-      koraci = ["Dodirnite „Otvori u Safariju\" ispod (ili ⋯ gore desno → „Otvori u Safariju\").",
-        "U Safariju kliknite „Pozovi\" i dodirnite „Dozvoli\"."];
+    kopiraj.hidden = false;
+    if (IOS) {
+      uvod = "Ova aplikacija ne pušta mikrofon unutar sebe. Otvorite sajt u Safariju:";
+      koraci = ["Dodirnite ⋯ gore desno i izaberite „Otvori u spoljnom pregledaču\" (ili „Otvori u Safariju\").",
+        "Ili dodirnite „Kopiraj link\" ispod i nalepite ga u Safari.", "U Safariju kliknite „Pozovi\" i dozvolite mikrofon."];
+    } else if (ANDROID) {
+      uvod = "Ova aplikacija ne pušta mikrofon unutar sebe. Otvorite sajt u Chrome-u:";
+      koraci = ["Dodirnite ⋮ gore desno i izaberite „Otvori u Chrome-u\" (ili „Otvori u pregledaču\").",
+        "Ili dodirnite „Kopiraj link\" ispod i nalepite ga u Chrome.", "U Chrome-u kliknite „Pozovi\" i dozvolite mikrofon."];
     } else {
-      koraci = ["Otvorite callsistent.com u Chrome-u, Safariju ili Edge-u.", "Kliknite „Pozovi\" i dozvolite mikrofon."];
+      uvod = "Ovaj browser ne pušta mikrofon. Otvorite sajt u Chrome-u, Safariju, Edge-u ili Firefox-u:";
+      koraci = ["Dodirnite „Kopiraj link\" i nalepite ga u drugi browser.", "Kliknite „Pozovi\" i dozvolite mikrofon."];
     }
   } else if (razlog === "blokirano") {
     uvod = "Mikrofon je ranije blokiran za ovaj sajt. Uključite ga ovako:";
@@ -365,6 +366,25 @@ function pomocZaMikrofon(razlog) {
   koraci.forEach((k) => { const li = document.createElement("li"); li.textContent = k; $(".cs-koraci").appendChild(li); });
   $(".cs-mik-ponovo").hidden = razlog === "nema-uredjaja";
   prikaziKorak("mikrofon");
+}
+
+function kopirajLink() {
+  const link = location.origin + location.pathname;
+  const gotovo = () => { $(".cs-mik-kopiraj span").textContent = "Link je kopiran ✓"; };
+  if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(link).then(gotovo, () => rucnoKopiraj(link, gotovo));
+  rucnoKopiraj(link, gotovo);
+}
+function rucnoKopiraj(link, gotovo) {
+  const polje = document.createElement("textarea");
+  polje.value = link;
+  polje.setAttribute("readonly", "");
+  polje.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+  dlg.appendChild(polje);
+  polje.select();
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) {}
+  polje.remove();
+  if (ok) gotovo(); else $(".cs-mik-kopiraj span").textContent = link;
 }
 
 // „Pozovi": prvo mikrofon, pa prijava (ako treba), pa provera limita i razgovor.
@@ -558,6 +578,7 @@ const akcije = {
   "posalji-ponovo": posaljiPonovo,
   "promeni-mejl": () => { prikaziKorak("prijava"); formaPrijava.email.focus(); },
   "mikrofon-ponovo": () => { prikaziKorak("izbor"); pozovi(); },
+  "kopiraj-link": kopirajLink,
   odjava,
 };
 [dlg, bar].forEach((el) => el.addEventListener("click", (e) => {
