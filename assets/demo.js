@@ -322,7 +322,7 @@ async function traziMikrofon() {
   }
 }
 
-function pomocZaMikrofon(razlog) {
+function pomocZaMikrofon(razlog, ponovo) {
   // Aplikacije (Instagram, Facebook, Viber…) ne dozvoljavaju sajtu da ih sam otvori u drugom browseru,
   // pa dajemo uputstvo za njihov meni i dugme koje kopira link.
   const kopiraj = $(".cs-mik-kopiraj");
@@ -361,10 +361,13 @@ function pomocZaMikrofon(razlog) {
       ? ["Ako se prozorčić ne pojavi: Podešavanja → Safari → Mikrofon → Pitaj ili Dozvoli."]
       : ["Ako se prozorčić ne pojavi, proverite da li je mikrofon uključen u podešavanjima računara."];
   }
+  // Bez ovoga „Pokušaj ponovo" izgleda kao da ne radi: aplikacija odbije mikrofon bez pitanja i isti ekran se vrati.
+  if (ponovo && razlog !== "nema-uredjaja") uvod = "Ni ovog puta nije uspelo. " + uvod;
   $(".cs-mik-uvod").textContent = uvod;
   $(".cs-koraci").innerHTML = "";
   koraci.forEach((k) => { const li = document.createElement("li"); li.textContent = k; $(".cs-koraci").appendChild(li); });
-  $(".cs-mik-ponovo").hidden = razlog === "nema-uredjaja";
+  // U aplikaciji ponovni pokušaj ne pomaže kad mikrofon jednom odbije (ili ga uopšte nema), pa ostaje samo „Kopiraj link".
+  $(".cs-mik-ponovo").hidden = razlog === "nema-uredjaja" || razlog === "nema" || (ponovo && U_APLIKACIJI);
   prikaziKorak("mikrofon");
 }
 
@@ -388,11 +391,11 @@ function rucnoKopiraj(link, gotovo) {
 }
 
 // „Pozovi": prvo mikrofon, pa prijava (ako treba), pa provera limita i razgovor.
-async function pozovi() {
+async function pozovi(ponovo = false) {
   if (zauzeto || !AGENTI[izabrana]) return;
   if (!mikrofonOk) {
     const razlog = await traziMikrofon();
-    if (razlog !== "ok") return pomocZaMikrofon(razlog);
+    if (razlog !== "ok") return pomocZaMikrofon(razlog, ponovo);
   }
   if (!korisnik) {
     porukaForme(formaPrijava, "");
@@ -577,7 +580,7 @@ const akcije = {
   nazad: () => otvori(),
   "posalji-ponovo": posaljiPonovo,
   "promeni-mejl": () => { prikaziKorak("prijava"); formaPrijava.email.focus(); },
-  "mikrofon-ponovo": () => { prikaziKorak("izbor"); pozovi(); },
+  "mikrofon-ponovo": () => { prikaziKorak("izbor"); pozovi(true); },
   "kopiraj-link": kopirajLink,
   odjava,
 };
