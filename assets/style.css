@@ -97,6 +97,18 @@ section.alt { background: var(--alt); }
 @media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; gap: 40px; } }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .hero .small { margin-top: 16px; }
+.btn-demo { gap: 10px; }
+/* Telefon: dugme za demo odmah ispod naslova, da se vidi na prvom ekranu (i iznad trake za kolačiće). */
+@media (max-width: 640px) {
+  .hero { padding: 28px 0 56px; }
+  .hero .wrap > div:first-child { display: flex; flex-direction: column; align-items: flex-start; }
+  .hero h1 { margin: 10px 0 18px; }
+  .hero .actions { order: 1; width: 100%; }
+  .hero .actions .btn { flex: 1 1 100%; }
+  .hero .actions .btn-demo { padding: 16px 20px; font-size: 17px; }
+  .hero .small { order: 2; margin: 10px 0 0; }
+  .hero .lead { order: 3; margin: 24px 0 0; font-size: 17px; }
+}
 
 /* Kartica rezimea */
 .summary { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
@@ -220,7 +232,13 @@ footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-betwe
 .consent[hidden] { display: none; }
 .consent p { margin: 0 0 14px; color: var(--muted); }
 .consent .btn { padding: 9px 16px; font-size: 14px; }
-@media (max-width: 520px) { .consent { left: 12px; right: 12px; max-width: none; } }
+/* Telefon: niska traka uz dno, da ne pokriva sadržaj i dugmad */
+@media (max-width: 520px) {
+  .consent { left: 8px; right: 8px; bottom: 8px; max-width: none; padding: 10px 12px; font-size: 13px; line-height: 1.35; }
+  .consent p { margin: 0 0 8px; }
+  .consent .actions { justify-content: flex-end; gap: 8px; }
+  .consent .btn { padding: 7px 14px; font-size: 13px; }
+}
 
 /* Navigacija: trenutna delatnost */
 .nav ul a[aria-current="page"] { color: var(--text); }

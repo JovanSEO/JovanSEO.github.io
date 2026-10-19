@@ -508,9 +508,11 @@ async function posaljiKod(e) {
 
 async function potvrdiKod(e) {
   e?.preventDefault();
+  const dugme = formaKod.querySelector('[type="submit"]');
+  // iPhone posle automatskog upisa koda pošalje i formu; drugi pokušaj istim (već iskorišćenim) kodom bi javio grešku.
+  if (dugme.disabled || korisnik) return;
   const kod = formaKod.kod.value.replace(/\D/g, "");
   if (kod.length !== 6) { porukaForme(formaKod, "Kod ima 6 cifara.", true); return formaKod.kod.focus(); }
-  const dugme = formaKod.querySelector('[type="submit"]');
   dugme.disabled = true;
   porukaForme(formaKod, "Proveravamo kod…");
   const { data, error } = await sb.auth.verifyOtp({ email: emailZaKod, token: kod, type: "email" });
@@ -670,3 +672,24 @@ sb.auth.getSession().then(({ data: { session } }) => {
 });
 osveziIzbor();
 zabelezi("poseta", document.referrer ? (() => { try { return new URL(document.referrer).hostname; } catch (e) { return ""; } })() : "");
+
+// Koliko dugo posetilac ostane (broji se samo dok je stranica vidljiva) i dokle skroluje:
+// da se vidi da li odlazi odmah (oglas privlači pogrešne ljude) ili posle čitanja (stranica ne ubedi).
+let sekundiNaStranici = 0;
+const tajmerStranice = setInterval(() => {
+  if (document.visibilityState !== "visible") return;
+  sekundiNaStranici++;
+  if ([10, 30, 60, 120].includes(sekundiNaStranici)) zabelezi("na-stranici", sekundiNaStranici);
+  if (sekundiNaStranici >= 120) clearInterval(tajmerStranice);
+}, 1000);
+let skrolDo = 0;
+addEventListener("scroll", () => {
+  const visina = document.documentElement.scrollHeight - innerHeight;
+  const posto = visina > 0 ? (scrollY / visina) * 100 : 100;
+  for (const prag of [25, 50, 75, 100]) if (posto >= prag - 1 && skrolDo < prag) { skrolDo = prag; zabelezi("skrol", prag); }
+}, { passive: true });
+// Ostali klikovi koji vode ka nama: „Zakažite razgovor" (stranica, plutajuće dugme, prozor) i „Isprobajte" u meniju.
+document.addEventListener("click", (e) => {
+  if (e.target.closest("[data-zakazi], [data-zakazi-demo], .zakazi-fab")) zabelezi("zakazi", dlg.open ? dlg.dataset.stanje : "stranica");
+  else if (e.target.closest('a[href="#demo"]')) zabelezi("isprobajte");
+}, true);
