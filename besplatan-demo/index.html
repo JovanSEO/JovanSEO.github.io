@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Besplatan demo za vaš biznis – Callsistent</title>
+  <meta name="description" content="Pošaljite link sajta ili Google Maps profila i za 24 sata dobijate AI recepciju podešenu za vaš biznis, da je besplatno probate." />
+  <link rel="canonical" href="https://callsistent.com/besplatan-demo/" />
+  <meta name="theme-color" content="#0f2a44" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/source-serif-4-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/style.css?v=10" />
+  <style>
+    .zahtev .wrap { display: grid; grid-template-columns: 1fr minmax(0, 460px); gap: 56px; align-items: start; }
+    @media (max-width: 900px) { .zahtev .wrap { grid-template-columns: 1fr; gap: 24px; } }
+    .zahtev h1 { margin: 12px 0 16px; }
+    .zahtev .lead { margin-bottom: 18px; }
+    .zahtev-kartica { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px 24px 22px;
+      box-shadow: 0 18px 40px -24px rgba(15, 42, 68, .35); }
+    .zahtev-kartica h2 { font-size: 26px; margin: 0 0 6px; }
+    .zahtev-kartica .cs-uvod { margin: 0 0 18px; font-size: 15px; color: var(--muted); }
+    .cs-polje select { width: 100%; padding: 13px 14px; font: 400 16px/1.3 var(--sans); color: var(--text); background: var(--card);
+      border: 1px solid var(--border); border-radius: 8px; }
+    .cs-polje select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+    .cs-polje small { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
+    .zahtev-kartica .btn { width: 100%; padding: 16px 20px; font-size: 17px; }
+    .zahtev-kartica .btn:disabled { opacity: .6; cursor: wait; }
+    .zahtev-kartica .small { margin: 12px 0 0; text-align: center; font-size: 13px; }
+    .zamka { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .hvala h2 { margin-top: 4px; }
+    .hvala p { color: var(--muted); }
+    .pregled-tacke { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .pregled-tacke li { display: flex; gap: 10px; align-items: baseline; color: var(--muted); }
+    .pregled-tacke li::before { content: ""; flex: none; width: 10px; height: 2px; background: var(--accent); transform: translateY(-4px); }
+    @media (max-width: 600px) {
+      .zahtev { padding-top: 22px; }
+      .zahtev .lead { font-size: 17px; }
+      .pregled-tacke { display: none; }
+      .zahtev-kartica { padding: 22px 18px 18px; }
+    }
+  </style>
+
+  <!-- Meta Pixel „Callsistent – sajt". Ne šalje ništa dok posetilac ne prihvati kolačiće (fbq consent). -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('consent', 'revoke');
+    fbq('init', '2196038948458091');
+    fbq('track', 'PageView');
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="../" aria-label="Callsistent – početna">
+        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M47.6 16.4A22 22 0 1 0 47.6 47.6" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="49" cy="32" r="4.5" style="fill: var(--accent)"/>
+        </svg>
+        <b>Callsistent</b>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero zahtev">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Besplatno · bez obaveze</span>
+        <h1>Pošaljite link sajta. Mi pravimo AI recepciju za vaš biznis.</h1>
+        <p class="lead">Za 24 sata dobijate link za probni poziv: recepcija se na srpskom javlja vašim klijentima,
+          zna vaše usluge, cene i radno vreme i beleži zakazivanja.</p>
+        <ul class="pregled-tacke">
+          <li>Javlja se kada vi ne stignete, i posle radnog vremena.</li>
+          <li>Odgovara na pitanja prema podacima sa vašeg sajta.</li>
+          <li>Svaki poziv upisuje u vašu tabelu: ko je zvao, zašto i kada da ga pozovete.</li>
+        </ul>
+      </div>
+
+      <div>
+        <form class="zahtev-kartica" id="zahtev" novalidate>
+          <h2>Vaš besplatan demo</h2>
+          <p class="cs-uvod">Popunite za 30 sekundi. Demo pravimo ručno, za svaki biznis posebno.</p>
+          <label class="cs-polje"><span>Ime i prezime</span>
+            <input id="z-ime" name="ime" autocomplete="name" maxlength="120" required></label>
+          <label class="cs-polje"><span>Mejl</span>
+            <input id="z-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="200" required></label>
+          <label class="cs-polje"><span>Sajt ili Google Maps link</span>
+            <input id="z-url" name="url" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" maxlength="500" placeholder="mojsajt.rs" required>
+            <small>Nemate sajt? Nalepite link vašeg profila sa Google Maps-a.</small></label>
+          <label class="cs-polje"><span>Vrsta biznisa</span>
+            <select id="z-vrsta" name="vrsta">
+              <option value="">Izaberite</option>
+              <option>Stomatološka ordinacija</option>
+              <option>Klinika ili ordinacija</option>
+              <option>Advokatska kancelarija</option>
+              <option>Salon lepote ili frizer</option>
+              <option>Auto servis</option>
+              <option>Veterinarska ambulanta</option>
+              <option>Restoran ili kafić</option>
+              <option>Nešto drugo</option>
+            </select></label>
+          <div class="zamka" aria-hidden="true"><label>Firma <input name="firma" tabindex="-1" autocomplete="off"></label></div>
+          <label class="cs-kvacica"><input id="z-saglasnost" name="saglasnost" type="checkbox" required>
+            <span>Slažem se da Callsistent koristi javne podatke sa mog sajta za izradu demoa i da me kontaktira mejlom
+              (<a href="../privatnost/" target="_blank">politika privatnosti</a>).</span></label>
+          <p class="cs-poruka" aria-live="polite"></p>
+          <button class="btn btn-primary" type="submit">Pošaljite, želim svoj demo</button>
+          <p class="small">Bez kartice i bez obaveze. Demo važi 7 dana.</p>
+        </form>
+
+        <div class="zahtev-kartica hvala" id="hvala" hidden tabindex="-1">
+          <span class="eyebrow">Primljeno</span>
+          <h2>Hvala<span class="hvala-ime"></span>!</h2>
+          <p>Pravimo recepciju za vaš biznis. Link za probni poziv stiže na <b class="hvala-mejl"></b> u roku od 24 sata
+            (radnim danima). Ako ga ne vidite, proverite i folder Promocije ili Spam.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="kako-funkcionise" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kako funkcioniše</span>
+        <h2>Od linka do probnog poziva za jedan dan</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Pošaljete link</h3><p>Sajt ili Google Maps profil vašeg biznisa. Ništa ne morate da pripremate.</p></div>
+        <div class="step"><h3>Mi podesimo recepciju</h3><p>Usluge, cene, radno vreme i česta pitanja preuzimamo sa vašeg sajta.</p></div>
+        <div class="step"><h3>Probate je</h3><p>Dobijete link, pozovete iz browsera i razgovarate kao vaš klijent.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pitanja">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Pitanja</span>
+        <h2>Česta pitanja</h2>
+      </div>
+      <details><summary>Da li demo nešto košta?</summary>
+        <p>Ne. Demo je besplatan i bez obaveze, i ne tražimo karticu.</p></details>
+      <details><summary>Šta ako nemam sajt?</summary>
+        <p>Pošaljite link vašeg Google Maps profila. Preuzećemo naziv, adresu, radno vreme i usluge koje su tamo navedene.</p></details>
+      <details><summary>Šta radite sa mojim podacima?</summary>
+        <p>Koristimo samo javne podatke sa vašeg sajta ili profila, da napravimo demo. Demo i te podatke brišemo posle 7 dana,
+          osim ako se drugačije dogovorimo.</p></details>
+      <details><summary>Kako bi to radilo kod nas?</summary>
+        <p>Kod operatera se uključuje preusmeravanje poziva kada se niko ne javi, kada je linija zauzeta ili posle radnog
+          vremena. Klijenti zovu isti broj kao i do sada.</p></details>
+      <details><summary>Za koje biznise je ovo?</summary>
+        <p>Za sve koji primaju pozive: ordinacije i klinike, advokatske kancelarije, salone, servise, restorane i druge.</p></details>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="wrap">
+      <span>© 2026 Callsistent · <a href="mailto:info@callsistent.com">info@callsistent.com</a> · <a href="../">Početna</a> · <a href="../privatnost/">Politika privatnosti</a> · <a href="#" id="kolacici">Podešavanja kolačića</a></span>
+    </div>
+  </footer>
+
+  <div class="consent" id="consent" hidden>
+    <p>Koristimo kolačiće za merenje uspešnosti oglasa (Meta Pixel). Bez vaše saglasnosti ništa ne merimo.</p>
+    <div class="actions">
+      <button class="btn btn-ghost" type="button" id="consent-ne">Odbijam</button>
+      <button class="btn btn-primary" type="button" id="consent-da">Prihvatam</button>
+    </div>
+  </div>
+
+  <script src="../assets/saglasnost.js?v=4"></script>
+  <script src="../assets/zahtev.js?v=1"></script>
+</body>
+</html>
