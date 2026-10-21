@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kalkulator propuštenih poziva – Callsistent</title>
+  <!-- Skrivena stranica za razgovore sa klijentima (deli se ekran). Ne indeksira se i nigde nije linkovana;
+       namerno nije ni u sitemap.xml ni u robots.txt (robots.txt je javan i otkrio bi adresu). Bez Pixel-a i brojača.
+       Naša zarada se ovde ne prikazuje (izvorni kod je javan); interni račun je u marketing/kalkulator/kalkulator.html. -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#0f2a44" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/source-serif-4-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/style.css?v=10" />
+  <style>
+    :root { --kalk-bg: #f5f6f8; --gubitak: #b3261e; --gubitak-bg: #fbebea; --dobitak: #1d7a4c; --dobitak-bg: #e6f3ec; --zlato-bg: #f4ede1; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { --kalk-bg: #0f1a2b; --gubitak: #f2867e; --gubitak-bg: #3a1d1f; --dobitak: #6fcf9c; --dobitak-bg: #15301f; --zlato-bg: #2a2a22; }
+    }
+    :root[data-theme="dark"] { --kalk-bg: #0f1a2b; --gubitak: #f2867e; --gubitak-bg: #3a1d1f; --dobitak: #6fcf9c; --dobitak-bg: #15301f; --zlato-bg: #2a2a22; }
+    body.kalkulator { background: var(--kalk-bg); }
+    .kalk { max-width: 1080px; margin: 0 auto; padding: 28px 16px 48px; display: grid; gap: 24px; font-size: 15px; line-height: 1.5; }
+    .kalk header { display: grid; gap: 6px; }
+    .kalk h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin: 0; text-wrap: balance; }
+    .kalk h2 { font-size: 20px; line-height: 1.2; margin: 0; text-wrap: balance; }
+    .kalk .uvod { margin: 0; color: var(--muted); max-width: 62ch; font-size: 16px; }
+    .kalk .mreza { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 24px; align-items: start; }
+    @media (max-width: 860px) { .kalk .mreza { grid-template-columns: 1fr; } }
+    .kalk .karta { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; display: grid; gap: 18px; min-width: 0; }
+    .kalk .polje { display: grid; gap: 8px; }
+    .kalk .polje-vrh { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .kalk .polje label { font-weight: 600; }
+    .kalk .polje small { color: var(--muted); font-size: 13px; }
+    .kalk .unos { display: flex; align-items: center; gap: 6px; flex: none; }
+    .kalk .unos input { width: 84px; padding: 7px 9px; font: 600 16px/1.2 var(--sans); color: var(--text); background: var(--kalk-bg);
+      border: 1px solid var(--border); border-radius: 8px; text-align: right; font-variant-numeric: tabular-nums; }
+    .kalk .unos span { color: var(--muted); font-size: 13px; min-width: 26px; }
+    .kalk input:focus-visible, .kalk summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .kalk input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+    .kalk .izvedeno { background: var(--zlato-bg); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+    .kalk .izvedeno b { font-variant-numeric: tabular-nums; }
+    .kalk .glavno { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 520px) { .kalk .glavno { grid-template-columns: 1fr; } }
+    .kalk .broj { border-radius: 12px; padding: 16px; display: grid; gap: 4px; min-width: 0; }
+    .kalk .broj .natpis { font-size: 13px; font-weight: 600; letter-spacing: .02em; }
+    .kalk .broj .iznos { font: 600 clamp(30px, 4.4vw, 40px)/1.05 var(--serif); font-variant-numeric: tabular-nums; }
+    .kalk .broj .sitno { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .kalk .gubitak { background: var(--gubitak-bg); }
+    .kalk .gubitak .natpis, .kalk .gubitak .iznos { color: var(--gubitak); }
+    .kalk .cena { background: var(--kalk-bg); border: 1px solid var(--border); }
+    .kalk .poruka { border-left: 4px solid var(--dobitak); background: var(--dobitak-bg); border-radius: 0 10px 10px 0; padding: 14px 16px; display: grid; gap: 4px; }
+    .kalk .poruka strong { font: 600 19px/1.3 var(--serif); }
+    .kalk .poruka span { color: var(--muted); font-size: 14px; }
+    .kalk .trake { display: grid; gap: 10px; }
+    .kalk .traka { display: grid; grid-template-columns: 150px minmax(0, 1fr) 90px; gap: 10px; align-items: center; font-size: 13px; }
+    @media (max-width: 520px) { .kalk .traka { grid-template-columns: 110px minmax(0, 1fr) 76px; } }
+    .kalk .stub { height: 14px; border-radius: 7px; background: var(--border); overflow: hidden; }
+    .kalk .stub i { display: block; height: 100%; border-radius: 7px; transition: width .25s ease; }
+    .kalk .traka .v { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+    @media (prefers-reduced-motion: reduce) { .kalk .stub i { transition: none; } }
+    .kalk .ponuda-kolone { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .kalk .ponuda-kolone { grid-template-columns: 1fr; } }
+    .kalk .faza { border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+    .kalk .faza h3 { margin: 0; font: 600 15px/1.2 var(--sans); }
+    .kalk .red { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; font-variant-numeric: tabular-nums; }
+    .kalk .red span:first-child { color: var(--muted); }
+    .kalk .red span:last-child { white-space: nowrap; }
+    .kalk .red.ukupno { border-top: 1px solid var(--border); padding-top: 10px; font-weight: 700; font-size: 16px; }
+    .kalk .red.ukupno span:first-child { color: var(--text); }
+    .kalk details { border-bottom: 0; border-top: 1px solid var(--border); padding: 14px 0 0; }
+    .kalk summary { color: var(--muted); }
+    .kalk .uslovi { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px 20px; margin-top: 14px; }
+    .kalk .uslovi label { font-weight: 500; font-size: 14px; }
+    .kalk .napomena { color: var(--muted); font-size: 13px; margin: 0; }
+  </style>
+</head>
+<body class="kalkulator">
+  <nav class="nav">
+    <div class="wrap">
+      <span class="brand">
+        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M47.6 16.4A22 22 0 1 0 47.6 47.6" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="49" cy="32" r="4.5" style="fill: var(--accent)"/>
+        </svg>
+        <b>Callsistent</b>
+      </span>
+    </div>
+  </nav>
+
+  <main class="kalk">
+    <header>
+      <span class="eyebrow">AI recepcija</span>
+      <h1>Koliko vas koštaju propušteni pozivi?</h1>
+      <p class="uvod">Unesite koliko poziva dnevno ostane bez odgovora i koliko vam vredi jedan novi pacijent. Račun pokazuje
+        koliko novca mesečno odlazi na drugu stranu i koliko bi koštalo da se na te pozive javlja AI recepcija.</p>
+    </header>
+
+    <div class="mreza">
+      <section class="karta" aria-labelledby="naslov-pozivi">
+        <h2 id="naslov-pozivi">Vaši pozivi</h2>
+
+        <div class="polje">
+          <div class="polje-vrh"><label for="pozivi">Poziva dnevno bez odgovora</label>
+            <span class="unos"><input id="pozivi" type="number" min="0" max="80" step="1" value="8" inputmode="numeric"><span>dnevno</span></span></div>
+          <input id="pozivi-k" type="range" min="0" max="80" step="1" value="8" aria-label="Poziva dnevno bez odgovora">
+          <small>Zauzeta linija, niko ne stigne da se javi, posle radnog vremena i vikendom.</small>
+        </div>
+
+        <div class="polje">
+          <div class="polje-vrh"><label for="trajanje">Prosečno trajanje poziva</label>
+            <span class="unos"><input id="trajanje" type="number" min="0.5" max="10" step="0.5" value="2.5" inputmode="decimal"><span>min</span></span></div>
+          <input id="trajanje-k" type="range" min="0.5" max="10" step="0.5" value="2.5" aria-label="Prosečno trajanje poziva">
+        </div>
+
+        <div class="polje">
+          <div class="polje-vrh"><label for="dani">Dana u mesecu kada stižu pozivi</label>
+            <span class="unos"><input id="dani" type="number" min="1" max="31" step="1" value="26" inputmode="numeric"><span>dana</span></span></div>
+          <input id="dani-k" type="range" min="1" max="31" step="1" value="26" aria-label="Dana u mesecu kada stižu pozivi">
+        </div>
+
+        <div class="polje">
+          <div class="polje-vrh"><label for="procenat">Koliko tih poziva postane pacijent</label>
+            <span class="unos"><input id="procenat" type="number" min="0" max="100" step="5" value="30" inputmode="numeric"><span>%</span></span></div>
+          <input id="procenat-k" type="range" min="0" max="100" step="5" value="30" aria-label="Koliko tih poziva postane pacijent">
+          <small>Ostalo su pitanja o ceni, radnom vremenu, rezultatima i slično.</small>
+        </div>
+
+        <div class="polje">
+          <div class="polje-vrh"><label for="vrednost">Koliko vam vredi jedan novi pacijent</label>
+            <span class="unos"><input id="vrednost" type="number" min="0" max="5000" step="1" value="77" inputmode="numeric"><span>€</span></span></div>
+          <input id="vrednost-k" type="range" min="0" max="600" step="1" value="77" aria-label="Koliko vam vredi jedan novi pacijent">
+          <small>Prosečan prvi račun, na primer pregled specijaliste 9.000 din ≈ 77 €.</small>
+        </div>
+
+        <div class="izvedeno" id="izvedeno"></div>
+      </section>
+
+      <section class="karta" aria-labelledby="naslov-racun">
+        <h2 id="naslov-racun">Račun za jedan mesec</h2>
+        <div class="glavno">
+          <div class="broj gubitak">
+            <span class="natpis">Mesečno vam izmakne</span>
+            <span class="iznos" id="gubitak">0 €</span>
+            <span class="sitno" id="gubitak-sitno"></span>
+          </div>
+          <div class="broj cena">
+            <span class="natpis">Callsistent mesečno</span>
+            <span class="iznos" id="cena">0 €</span>
+            <span class="sitno" id="cena-sitno"></span>
+          </div>
+        </div>
+        <div class="poruka"><strong id="poruka-naslov"></strong><span id="poruka-tekst"></span></div>
+        <div class="trake" aria-hidden="true">
+          <div class="traka"><span>Izgubljen prihod</span><span class="stub"><i id="traka-gubitak" style="background: var(--gubitak)"></i></span><span class="v" id="traka-gubitak-v"></span></div>
+          <div class="traka"><span>Cena Callsistent</span><span class="stub"><i id="traka-cena" style="background: var(--primary)"></i></span><span class="v" id="traka-cena-v"></span></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="karta" aria-labelledby="naslov-ponuda">
+      <h2 id="naslov-ponuda">Ponuda</h2>
+      <div class="ponuda-kolone">
+        <div class="faza">
+          <h3>Prvi mesec</h3>
+          <div class="red"><span>Podešavanje (jednokratno), uključeno <b id="p1-min"></b> min</span><span id="p1-setup"></span></div>
+          <div class="red"><span id="p1-preko-opis"></span><span id="p1-preko"></span></div>
+          <div class="red ukupno"><span>Ukupno prvi mesec</span><span id="p1-ukupno"></span></div>
+        </div>
+        <div class="faza">
+          <h3>Od drugog meseca</h3>
+          <div class="red"><span>Mesečna pretplata i unapređivanje, uključeno <b id="p2-min"></b> min</span><span id="p2-pretplata"></span></div>
+          <div class="red"><span id="p2-preko-opis"></span><span id="p2-preko"></span></div>
+          <div class="red ukupno"><span>Ukupno mesečno</span><span id="p2-ukupno"></span></div>
+        </div>
+      </div>
+      <details>
+        <summary>Promeni uslove ponude</summary>
+        <div class="uslovi">
+          <div class="polje"><div class="polje-vrh"><label for="setup">Podešavanje</label><span class="unos"><input id="setup" type="number" min="0" step="10" value="400"><span>€</span></span></div></div>
+          <div class="polje"><div class="polje-vrh"><label for="setup-min">Uključeno prvi mesec</label><span class="unos"><input id="setup-min" type="number" min="0" step="10" value="100"><span>min</span></span></div></div>
+          <div class="polje"><div class="polje-vrh"><label for="pretplata">Mesečna pretplata</label><span class="unos"><input id="pretplata" type="number" min="0" step="10" value="300"><span>€</span></span></div></div>
+          <div class="polje"><div class="polje-vrh"><label for="pretplata-min">Uključeno mesečno</label><span class="unos"><input id="pretplata-min" type="number" min="0" step="10" value="200"><span>min</span></span></div></div>
+          <div class="polje"><div class="polje-vrh"><label for="po-minutu">Svaki minut preko</label><span class="unos"><input id="po-minutu" type="number" min="0" step="0.05" value="0.5"><span>€</span></span></div></div>
+        </div>
+      </details>
+    </section>
+
+    <p class="napomena">Procena na osnovu unetih brojeva. Stvarne minute vidite u mesečnom izveštaju. Kurs 1 € = 117,2 din.</p>
+  </main>
+
+  <script>
+    (function () {
+      var KURS = 117.2;
+      var fmt0 = new Intl.NumberFormat("sr-Latn-RS", { maximumFractionDigits: 0 });
+      var fmt1 = new Intl.NumberFormat("sr-Latn-RS", { maximumFractionDigits: 1 });
+      var fmt2 = new Intl.NumberFormat("sr-Latn-RS", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      function eur(v) { return fmt0.format(Math.round(v)) + " €"; }
+      function din(v) { return fmt0.format(Math.round(v * KURS / 100) * 100) + " din"; }
+      function br(id) { var v = parseFloat(String(document.getElementById(id).value).replace(",", ".")); return isFinite(v) && v >= 0 ? v : 0; }
+      function upisi(id, tekst) { document.getElementById(id).textContent = tekst; }
+      function pacijenata(n) {
+        var d = n % 10, s = n % 100;
+        return d === 1 && s !== 11 ? "pacijent" : d >= 2 && d <= 4 && (s < 12 || s > 14) ? "pacijenta" : "pacijenata";
+      }
+
+      // Klizač i polje za broj prate jedno drugo.
+      ["pozivi", "trajanje", "dani", "procenat", "vrednost"].forEach(function (id) {
+        var polje = document.getElementById(id), klizac = document.getElementById(id + "-k");
+        polje.addEventListener("input", function () { klizac.value = polje.value; racunaj(); });
+        klizac.addEventListener("input", function () { polje.value = klizac.value; racunaj(); });
+      });
+      ["setup", "setup-min", "pretplata", "pretplata-min", "po-minutu"].forEach(function (id) {
+        document.getElementById(id).addEventListener("input", racunaj);
+      });
+
+      function racunaj() {
+        var pozivi = br("pozivi"), trajanje = br("trajanje"), dani = br("dani"), procenat = Math.min(br("procenat"), 100) / 100, vrednost = br("vrednost");
+        var setup = br("setup"), setupMin = br("setup-min"), pretplata = br("pretplata"), pretplataMin = br("pretplata-min"), poMinutu = br("po-minutu");
+
+        var mesecnoPoziva = pozivi * dani;
+        var minuta = mesecnoPoziva * trajanje;
+        var novihPacijenata = mesecnoPoziva * procenat;
+        var gubitak = novihPacijenata * vrednost;
+        var preko1 = Math.max(0, minuta - setupMin), preko2 = Math.max(0, minuta - pretplataMin);
+        var cena1 = setup + preko1 * poMinutu, cena2 = pretplata + preko2 * poMinutu;
+
+        document.getElementById("izvedeno").innerHTML = "To je <b>" + fmt0.format(mesecnoPoziva) + "</b> poziva i oko <b>" + fmt0.format(minuta) +
+          "</b> minuta mesečno. Jedan propušten poziv vam u proseku vredi <b>" + fmt2.format(procenat * vrednost) + " €</b>.";
+
+        upisi("gubitak", eur(gubitak));
+        upisi("gubitak-sitno", "≈ " + din(gubitak) + " · oko " + fmt1.format(novihPacijenata) + " pacijenata · " + eur(gubitak * 12) + " godišnje");
+        upisi("cena", eur(cena2));
+        upisi("cena-sitno", eur(pretplata) + " pretplata" + (preko2 > 0 ? " + " + fmt0.format(preko2) + " min × " + fmt2.format(poMinutu) + " €" : ", sve u paketu"));
+
+        if (vrednost <= 0 || procenat <= 0) {
+          upisi("poruka-naslov", "Unesite vrednost pacijenta i procenat");
+          upisi("poruka-tekst", "Bez toga ne može da se izračuna koliko propušteni pozivi koštaju.");
+        } else {
+          var potrebno = Math.max(1, Math.ceil(cena2 / vrednost)), odnos = cena2 > 0 ? gubitak / cena2 : 0;
+          upisi("poruka-naslov", "Isplati se već od " + potrebno + " " + pacijenata(potrebno) + " mesečno");
+          upisi("poruka-tekst", "Od oko " + fmt0.format(novihPacijenata) + " koje sada propuštate. " +
+            (odnos >= 1 ? "Na svaki uloženi evro vraća se oko " + fmt1.format(odnos) + " €." : "Pri ovim brojevima gubitak je manji od cene."));
+        }
+
+        var max = Math.max(gubitak, cena2, 1);
+        document.getElementById("traka-gubitak").style.width = (gubitak / max * 100) + "%";
+        document.getElementById("traka-cena").style.width = (cena2 / max * 100) + "%";
+        upisi("traka-gubitak-v", eur(gubitak));
+        upisi("traka-cena-v", eur(cena2));
+
+        upisi("p1-min", fmt0.format(setupMin)); upisi("p1-setup", eur(setup));
+        upisi("p1-preko-opis", fmt0.format(preko1) + " min preko paketa × " + fmt2.format(poMinutu) + " €"); upisi("p1-preko", eur(preko1 * poMinutu));
+        upisi("p1-ukupno", eur(cena1));
+        upisi("p2-min", fmt0.format(pretplataMin)); upisi("p2-pretplata", eur(pretplata));
+        upisi("p2-preko-opis", fmt0.format(preko2) + " min preko paketa × " + fmt2.format(poMinutu) + " €"); upisi("p2-preko", eur(preko2 * poMinutu));
+        upisi("p2-ukupno", eur(cena2));
+      }
+
+      racunaj();
+    })();
+  </script>
+</body>
+</html>
