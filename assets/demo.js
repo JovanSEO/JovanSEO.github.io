@@ -1,6 +1,6 @@
 // Demo razgovor sa Anom iz browsera (Retell Web SDK).
 // Stranica pre ovog fajla postavlja window.CS_DEMO = { vertikala } — delatnost koja je unapred izabrana u prozoru.
-// Sva dugmad za demo ([data-pozovi], [data-izbor-demo] i plutajuće dugme dole desno) otvaraju prozor „Demo poziv":
+// Sva dugmad za demo ([data-pozovi], [data-izbor-demo] i plutaće dugme dole desno) otvaraju prozor „Demo poziv":
 // izbor delatnosti → „Pozovi" → prijava (ime + mejl) → šestocifreni kod iz mejla → razgovor u toku → kraj sa pozivom na zakazivanje.
 // Prijava ide preko Supabase Auth-a; poziv pravi naša Edge Function `demo-poziv` (supabase/functions/demo-poziv),
 // koja proverava prijavu i dnevni limit i jedina zna tajni Retell ključ. Agenti i njihove verzije su tamo.
@@ -287,8 +287,10 @@ function zavrseno() {
 }
 
 function prikaziKraj(agent, sekundi) {
-  $(".cs-rezime").textContent = "Trajanje: " + mmss(sekundi) + ". Ovako bi Ana razgovarala sa " + agent.klijenti +
-    ". Zakažite kratak razgovor i podesićemo je za vas.";
+  // Rezime razgovora šalje Edge Function demo-rezime (za razgovore od 15 s naviše, kad Retell završi analizu).
+  $(".cs-rezime").textContent = "Trajanje: " + mmss(sekundi) + ". " +
+    (sekundi >= 15 ? "Za par minuta na mejl vam stiže rezime: ono što je Ana zabeležila iz razgovora. " : "") +
+    "Ovako bi Ana razgovarala sa " + agent.klijenti + ". Zakažite kratak razgovor i podesićemo je za vas.";
   $('[data-akcija="ponovo"]').hidden = preostalo === 0;
   $(".cs-preostalo").textContent = tekstPreostalo();
   osveziIzbor();
@@ -688,7 +690,7 @@ addEventListener("scroll", () => {
   const posto = visina > 0 ? (scrollY / visina) * 100 : 100;
   for (const prag of [25, 50, 75, 100]) if (posto >= prag - 1 && skrolDo < prag) { skrolDo = prag; zabelezi("skrol", prag); }
 }, { passive: true });
-// Ostali klikovi koji vode ka nama: „Zakažite razgovor" (stranica, plutajuće dugme, prozor) i „Isprobajte" u meniju.
+// Ostali klikovi koji vode ka nama: „Zakažite razgovor" (stranica, plutaće dugme, prozor) i „Isprobajte" u meniju.
 document.addEventListener("click", (e) => {
   if (e.target.closest("[data-zakazi], [data-zakazi-demo], .zakazi-fab")) zabelezi("zakazi", dlg.open ? dlg.dataset.stanje : "stranica");
   else if (e.target.closest('a[href="#demo"]')) zabelezi("isprobajte");
