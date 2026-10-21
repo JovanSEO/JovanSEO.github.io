@@ -13,14 +13,9 @@
   <link rel="preload" href="assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/fonts/source-serif-4-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/style.css?v=10" />
+  <link rel="stylesheet" href="assets/ponuda.css?v=1" />
   <style>
-    /* Ponuda „Besplatan demo za vaš biznis" (/besplatan-demo/): traka ispod menija i blok na početnoj */
-    .ponuda-traka { display: block; background: var(--accent); color: #fff; text-decoration: none; font-size: 15px; line-height: 1.4; }
-    .ponuda-traka .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 12px; padding-block: 10px; text-align: center; }
-    .ponuda-traka b { white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; }
-    .ponuda-traka:hover b, .ponuda-traka:focus-visible b { text-decoration-thickness: 2px; }
-    .ponuda-traka:focus-visible { outline: 2px solid var(--primary); outline-offset: -4px; }
-    .ponuda-oznaka { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #fff; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    /* Blok „Besplatan demo za vaš biznis" na početnoj (traka ispod menija je u assets/ponuda.css) */
     .ponuda { padding-top: 0; }
     .ponuda .demo { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: center; }
     .ponuda .demo h2 { margin-top: 6px; }
@@ -53,10 +48,11 @@
       </a>
       <button class="nav-meni" type="button" aria-expanded="false" aria-controls="nav-lista" aria-label="Otvori meni"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path class="crte" d="M4 7h16M4 12h16M4 17h16"/><path class="iks" d="M6 6l12 12M18 6L6 18"/></svg></button>
       <ul id="nav-lista">
+        <li class="hide-sm"><a class="nav-ponuda" href="besplatan-demo/">Demo za vaš biznis</a></li>
         <li class="hide-sm"><a href="advokati/">Advokati</a></li>
         <li class="hide-sm"><a href="bolnice/">Bolnice i klinike</a></li>
-        <li class="hide-sm"><a href="#kako-funkcionise">Kako funkcioniše</a></li>
-        <li class="hide-sm"><a href="#pitanja">Pitanja</a></li>
+        <li class="hide-sm hide-md"><a href="#kako-funkcionise">Kako funkcioniše</a></li>
+        <li class="hide-sm hide-md"><a href="#pitanja">Pitanja</a></li>
         <li class="hide-sm"><a href="#" data-zakazi>Zakažite razgovor</a></li>
         <li><a class="btn btn-primary" href="#delatnosti" data-izbor-demo>Isprobajte</a></li>
         <li class="nav-mejl"><a href="mailto:info@callsistent.com">info@callsistent.com</a></li>
