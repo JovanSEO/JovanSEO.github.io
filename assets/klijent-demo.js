@@ -248,7 +248,9 @@ async function pozovi() {
         const sekundi = pocetak ? Math.round((Date.now() - pocetak) / 1000) : 0;
         zavrseno();
         if (!pocetak) return prikaziIzbor("Razgovor je prekinut pre nego što je počeo. Pokušajte ponovo.");
-        $(".cs-rezime").textContent = "Trajanje: " + mmss(sekundi) + ".";
+        // Rezime razgovora šalje Edge Function demo-rezime, na mejl klijenta (za razgovore od 15 s naviše).
+        $(".cs-rezime").textContent = "Trajanje: " + mmss(sekundi) + "." +
+          (sekundi >= 15 ? " Za par minuta na mejl stiže rezime: ono što je Ana zabeležila iz razgovora." : "");
         prikaziKorak("kraj");
       },
     },
@@ -277,5 +279,11 @@ forma.addEventListener("submit", otkljucaj);
 forma.addEventListener("input", () => poruka("sifra", ""));
 window.addEventListener("pagehide", () => { if (poziv) poziv.end(); });
 
+// Link iz mejla može da nosi šifru posle # (npr. /demo-klimaservis/#šifra): upiše se sama i skloni iz adrese.
+if (location.hash.length > 1) {
+  const izLinka = decodeURIComponent(location.hash.slice(1)).trim();
+  history.replaceState(null, "", location.pathname + location.search);
+  if (izLinka) zapamti(izLinka);
+}
 sifra = zapamcena();
 if (sifra) otkljucaj(null, true); else forma.sifra.focus();
