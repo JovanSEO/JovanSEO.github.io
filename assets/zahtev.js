@@ -1,4 +1,5 @@
-// Forma „Besplatan demo" (/besplatan-demo/): šalje ime, mejl i link sajta ili Google Maps profila Edge Function-u
+// Forma „Besplatan demo" (/besplatan-demo/): šalje ime, mejl, link sajta ili Google Maps profila (i opciono vrstu
+// biznisa i koliko poziva dnevno propuštaju) Edge Function-u
 // `zahtev-demo` (supabase/functions/zahtev-demo), koja ih upisuje u bazu i u Google tabelu „Zahtevi".
 // Posle uspeha: Pixel `Lead` (samo uz pristanak na kolačiće, vidi saglasnost.js) i poruka „Hvala".
 // Anonimni brojač koraka (tabela `koraci`) je isti kao u demo.js: koliko ljudi stigne do forme i gde odustane.
@@ -99,8 +100,8 @@
     fetch(FUNKCIJA, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ime: ime, email: email, url: url, vrsta: forma.vrsta.value, saglasnost: true,
-        izvor: IZVOR, firma: forma.firma.value }),
+      body: JSON.stringify({ ime: ime, email: email, url: url, vrsta: forma.vrsta.value, propusteni: forma.propusteni.value,
+        saglasnost: true, izvor: IZVOR, firma: forma.firma.value }),
     }).then(function (odg) {
       return odg.json().catch(function () { return {}; }).then(function (telo) { return { status: odg.status, telo: telo }; });
     }).then(function (r) {

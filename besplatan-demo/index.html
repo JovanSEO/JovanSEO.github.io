@@ -13,6 +13,7 @@
   <link rel="preload" href="../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="../assets/fonts/source-serif-4-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../assets/style.css?v=10" />
+  <link rel="stylesheet" href="../assets/ponuda.css?v=1" />
   <style>
     .zahtev .wrap { display: grid; grid-template-columns: 1fr minmax(0, 460px); gap: 56px; align-items: start; }
     @media (max-width: 900px) { .zahtev .wrap { grid-template-columns: 1fr; gap: 24px; } }
@@ -29,6 +30,9 @@
     .zahtev-kartica .btn { width: 100%; padding: 16px 20px; font-size: 17px; }
     .zahtev-kartica .btn:disabled { opacity: .6; cursor: wait; }
     .zahtev-kartica .small { margin: 12px 0 0; text-align: center; font-size: 13px; }
+    .cs-polje span em { font-style: normal; font-weight: 400; color: var(--muted); }
+    /* Na ovoj stranici bez plutajućeg „Zakažite" dole levo, da ne smeta formi (u meniju ostaje). */
+    .zakazi-fab { display: none !important; }
     .zamka { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
     .hvala h2 { margin-top: 4px; }
     .hvala p { color: var(--muted); }
@@ -63,6 +67,17 @@
         </svg>
         <b>Callsistent</b>
       </a>
+      <button class="nav-meni" type="button" aria-expanded="false" aria-controls="nav-lista" aria-label="Otvori meni"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path class="crte" d="M4 7h16M4 12h16M4 17h16"/><path class="iks" d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <ul id="nav-lista">
+        <li class="hide-sm"><a class="nav-ponuda" href="../besplatan-demo/" aria-current="page">Demo za vaš biznis</a></li>
+        <li class="hide-sm"><a href="../advokati/">Advokati</a></li>
+        <li class="hide-sm"><a href="../bolnice/">Bolnice i klinike</a></li>
+        <li class="hide-sm hide-md"><a href="#kako-funkcionise">Kako funkcioniše</a></li>
+        <li class="hide-sm hide-md"><a href="#pitanja">Pitanja</a></li>
+        <li class="hide-sm"><a href="#" data-zakazi>Zakažite razgovor</a></li>
+        <li class="hide-sm"><a class="btn btn-primary" href="../#delatnosti">Isprobajte</a></li>
+        <li class="nav-mejl"><a href="mailto:info@callsistent.com">info@callsistent.com</a></li>
+      </ul>
     </div>
   </nav>
 
@@ -102,6 +117,15 @@
               <option>Veterinarska ambulanta</option>
               <option>Restoran ili kafić</option>
               <option>Nešto drugo</option>
+            </select></label>
+          <label class="cs-polje"><span>Koliko poziva dnevno propuštate? <em>(nije obavezno)</em></span>
+            <select id="z-propusteni" name="propusteni">
+              <option value="">Izaberite</option>
+              <option>Ne znam</option>
+              <option>Do 2</option>
+              <option>3 do 5</option>
+              <option>6 do 10</option>
+              <option>Više od 10</option>
             </select></label>
           <div class="zamka" aria-hidden="true"><label>Firma <input name="firma" tabindex="-1" autocomplete="off"></label></div>
           <label class="cs-kvacica"><input id="z-saglasnost" name="saglasnost" type="checkbox" required>
@@ -172,6 +196,8 @@
   </div>
 
   <script src="../assets/saglasnost.js?v=4"></script>
-  <script src="../assets/zahtev.js?v=1"></script>
+  <script src="../assets/zahtev.js?v=2"></script>
+  <script src="../assets/zakazivanje.js?v=5"></script>
+  <script src="../assets/meni.js?v=1"></script>
 </body>
 </html>
