@@ -13,6 +13,21 @@
   <link rel="preload" href="assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/fonts/source-serif-4-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/style.css?v=10" />
+  <style>
+    /* Ponuda „Besplatan demo za vaš biznis" (/besplatan-demo/): traka ispod menija i blok na početnoj */
+    .ponuda-traka { display: block; background: var(--accent); color: #fff; text-decoration: none; font-size: 15px; line-height: 1.4; }
+    .ponuda-traka .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 12px; padding-block: 10px; text-align: center; }
+    .ponuda-traka b { white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; }
+    .ponuda-traka:hover b, .ponuda-traka:focus-visible b { text-decoration-thickness: 2px; }
+    .ponuda-traka:focus-visible { outline: 2px solid var(--primary); outline-offset: -4px; }
+    .ponuda-oznaka { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #fff; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .ponuda { padding-top: 0; }
+    .ponuda .demo { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: center; }
+    .ponuda .demo h2 { margin-top: 6px; }
+    .ponuda .demo p { margin: 0; max-width: 60ch; }
+    .ponuda .demo .btn { white-space: nowrap; }
+    @media (max-width: 760px) { .ponuda .demo { grid-template-columns: 1fr; } .ponuda .demo .btn { width: 100%; } }
+  </style>
 
 
   <!-- Meta Pixel „Callsistent – sajt". Ne šalje ništa dok posetilac ne prihvati kolačiće (fbq consent). -->
@@ -48,6 +63,7 @@
       </ul>
     </div>
   </nav>
+  <a class="ponuda-traka" href="besplatan-demo/"><span class="wrap"><span class="ponuda-oznaka">Besplatno</span><span>AI recepcija za vaš biznis, besplatan demo za 24h.</span><b>Pošaljite link →</b></span></a>
 
   <header class="hero">
     <div class="wrap">
@@ -75,6 +91,20 @@
       </aside>
     </div>
   </header>
+
+  <section class="ponuda" aria-label="Besplatan demo za vaš biznis">
+    <div class="wrap">
+      <div class="demo">
+        <div>
+          <span class="eyebrow">Besplatno · za 24 sata</span>
+          <h2>Čujte AI recepciju napravljenu za vaš biznis</h2>
+          <p class="muted">Pošaljite link sajta ili Google Maps profila. Za 24 sata dobijate link za probni poziv: recepcija zna
+            vaše usluge, cene i radno vreme i javlja se na srpskom. Bez kartice i bez obaveze.</p>
+        </div>
+        <a class="btn btn-primary" href="besplatan-demo/">Pošaljite link sajta</a>
+      </div>
+    </div>
+  </section>
 
   <section id="delatnosti" class="alt">
     <div class="wrap">
