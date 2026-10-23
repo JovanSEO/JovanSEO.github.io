@@ -103,9 +103,9 @@
             <input id="z-ime" name="ime" autocomplete="name" maxlength="120" required></label>
           <label class="cs-polje"><span>Mejl</span>
             <input id="z-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="200" required></label>
-          <label class="cs-polje"><span>Sajt ili Google Maps link</span>
-            <input id="z-url" name="url" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" maxlength="500" placeholder="mojsajt.rs" required>
-            <small>Nemate sajt? Nalepite link vašeg profila sa Google Maps-a.</small></label>
+          <label class="cs-polje"><span>Sajt, Instagram ili naziv firme</span>
+            <input id="z-url" name="url" autocomplete="off" spellcheck="false" maxlength="500" placeholder="mojsajt.rs ili Salon Ana, Novi Sad" required>
+            <small>Nemate sajt? Upišite Instagram profil ili naziv firme i grad.</small></label>
           <label class="cs-polje"><span>Vrsta biznisa</span>
             <select id="z-vrsta" name="vrsta">
               <option value="">Izaberite</option>
@@ -129,7 +129,7 @@
             </select></label>
           <div class="zamka" aria-hidden="true"><label>Firma <input name="firma" tabindex="-1" autocomplete="off"></label></div>
           <label class="cs-kvacica"><input id="z-saglasnost" name="saglasnost" type="checkbox" required>
-            <span>Slažem se da Callsistent koristi javne podatke sa mog sajta za izradu demoa i da me kontaktira mejlom
+            <span>Slažem se da Callsistent koristi javne podatke sa mog sajta ili profila za izradu demoa i da me kontaktira mejlom
               (<a href="../privatnost/" target="_blank">politika privatnosti</a>).</span></label>
           <p class="cs-poruka" aria-live="polite"></p>
           <button class="btn btn-primary" type="submit">Pošaljite, želim svoj demo</button>
@@ -169,7 +169,8 @@
       <details><summary>Da li demo nešto košta?</summary>
         <p>Ne. Demo je besplatan i bez obaveze, i ne tražimo karticu.</p></details>
       <details><summary>Šta ako nemam sajt?</summary>
-        <p>Pošaljite link vašeg Google Maps profila. Preuzećemo naziv, adresu, radno vreme i usluge koje su tamo navedene.</p></details>
+        <p>Upišite vaš Instagram profil ili naziv firme i grad, a možete i link sa Google Maps-a. Preuzećemo naziv, adresu,
+          radno vreme i usluge koje su tamo navedene.</p></details>
       <details><summary>Šta radite sa mojim podacima?</summary>
         <p>Koristimo samo javne podatke sa vašeg sajta ili profila, da napravimo demo. Demo i te podatke brišemo posle 7 dana,
           osim ako se drugačije dogovorimo.</p></details>
@@ -196,7 +197,7 @@
   </div>
 
   <script src="../assets/saglasnost.js?v=4"></script>
-  <script src="../assets/zahtev.js?v=2"></script>
+  <script src="../assets/zahtev.js?v=3"></script>
   <script src="../assets/zakazivanje.js?v=5"></script>
   <script src="../assets/meni.js?v=1"></script>
 </body>

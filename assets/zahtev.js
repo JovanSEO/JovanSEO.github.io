@@ -1,4 +1,4 @@
-// Forma „Besplatan demo" (/besplatan-demo/): šalje ime, mejl, link sajta ili Google Maps profila (i opciono vrstu
+// Forma „Besplatan demo" (/besplatan-demo/): šalje ime, mejl, sajt, Instagram ili naziv firme (i opciono vrstu
 // biznisa i koliko poziva dnevno propuštaju) Edge Function-u
 // `zahtev-demo` (supabase/functions/zahtev-demo), koja ih upisuje u bazu i u Google tabelu „Zahtevi".
 // Posle uspeha: Pixel `Lead` (samo uz pristanak na kolačiće, vidi saglasnost.js) i poruka „Hvala".
@@ -65,7 +65,7 @@
   var PORUKE = {
     ime: "Upišite ime i prezime.",
     email: "Proverite mejl adresu.",
-    url: "Upišite link sajta (na primer mojsajt.rs) ili link sa Google Maps-a.",
+    url: "Upišite sajt, Instagram ili naziv firme i grad.",
     saglasnost: "Potrebna je vaša saglasnost da bismo napravili demo.",
     popunjeno: "Danas smo primili mnogo zahteva. Pokušajte sutra ili nam pišite na info@callsistent.com.",
     mreza: "Slanje nije uspelo. Proverite internet i pokušajte ponovo.",
@@ -78,20 +78,14 @@
     zabelezi("forma-greska", kljuc);
   }
 
-  function linkOk(v) {
-    var u = v.trim();
-    if (!u) return false;
-    if (!/^https?:\/\//i.test(u)) u = "https://" + u;
-    try { var x = new URL(u); return x.hostname.indexOf(".") > 0; } catch (e) { return false; }
-  }
-
   forma.addEventListener("submit", function (e) {
     e.preventDefault();
     poruka.textContent = ""; poruka.classList.remove("greska");
     var ime = forma.ime.value.trim(), email = forma.email.value.trim(), url = forma.url.value.trim();
     if (ime.length < 2) return greska("ime", forma.ime);
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return greska("email", forma.email);
-    if (!linkOk(url)) return greska("url", forma.url);
+    // Sajt, Instagram ili samo naziv firme i grad: prihvatamo sve (mnogi nemaju sajt), server sredi oblik.
+    if (url.length < 2) return greska("url", forma.url);
     if (!forma.saglasnost.checked) return greska("saglasnost", forma.saglasnost);
 
     dugme.disabled = true;
