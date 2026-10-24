@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privatna stranica – Callsistent</title>
+  <!-- Privatna stranica za jednog klijenta, iza šifre (proverava je Edge Function klijent-poziv).
+       Ne indeksira se i nigde nije linkovana; namerno nije ni u sitemap.xml ni u robots.txt (robots.txt je javan i otkrio bi adresu). -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#0f2a44" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/source-serif-4-latin-ext.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/style.css?v=10" />
+  <style>
+    .privatna main { padding: 24px 16px 48px; }
+    .kartica { display: block; margin: 0 auto; max-height: none; overflow: visible; }
+    .kartica .cs-primeri { margin-bottom: 18px; }
+    .kartica [data-korak="kraj"] .cs-dugmad { justify-content: center; }
+  </style>
+</head>
+<body class="privatna">
+  <nav class="nav">
+    <div class="wrap">
+      <span class="brand">
+        <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path d="M47.6 16.4A22 22 0 1 0 47.6 47.6" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="49" cy="32" r="4.5" style="fill: var(--accent)"/>
+        </svg>
+        <b>Callsistent</b>
+      </span>
+    </div>
+  </nav>
+
+  <main>
+    <div class="cs-demo kartica" data-klijent="globalnetsolar">
+      <div class="cs-telo">
+
+        <form class="cs-korak cs-forma" data-korak="sifra" novalidate>
+          <span class="eyebrow">Privatna stranica</span>
+          <h2>Upišite šifru</h2>
+          <p class="cs-uvod">Ova stranica je pripremljena samo za vas. Šifru ste dobili od Callsistenta.</p>
+          <label class="cs-polje"><span>Šifra</span>
+            <input name="sifra" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" maxlength="100" required></label>
+          <p class="cs-poruka" aria-live="polite"></p>
+          <button type="submit" class="cs-pozovi"><span>Otvori</span></button>
+        </form>
+
+        <div class="cs-korak" data-korak="izbor" hidden>
+          <span class="eyebrow">Demo · <span class="cs-naziv"></span></span>
+          <h2>Razgovarajte sa Anom</h2>
+          <p class="cs-uvod">Ana je AI recepcionistkinja podešena za <b class="cs-naziv"></b>. Zna vašu ponudu solarnih sistema
+            sa vašeg Instagrama i prima upite za ugradnju. Kliknite „Pozovi Anu" i razgovarajte kao vaš klijent. Kada browser pita za mikrofon, dodirnite „Dozvoli".</p>
+          <div class="cs-primeri"><p>Na primer, pitajte</p><ul></ul></div>
+          <p class="cs-poruka" aria-live="polite"></p>
+          <button type="button" class="cs-pozovi" data-akcija="pozovi"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Pozovi Anu</span></button>
+          <p class="cs-sitno">Razgovor ide preko browsera i traje najviše <span class="cs-minuta"></span> minuta. Najbolje sa slušalicama.
+            Razgovor se beleži radi provere rada asistentkinje, a rezime stiže na vaš mejl.
+            <a href="../privatnost/" target="_blank" rel="nofollow">Politika privatnosti</a></p>
+        </div>
+
+        <div class="cs-korak" data-korak="mikrofon" hidden>
+          <span class="eyebrow">Demo</span>
+          <h2>Potreban je mikrofon</h2>
+          <p class="cs-uvod cs-mik-uvod"></p>
+          <ol class="cs-koraci"></ol>
+          <a class="cs-pozovi cs-mik-otvori" href="#" hidden><span>Otvori u Safariju</span></a>
+          <button type="button" class="cs-pozovi cs-mik-ponovo" data-akcija="mikrofon-ponovo"><span>Pokušaj ponovo</span></button>
+          <button type="button" class="cs-veza cs-mik-kopiraj" data-akcija="kopiraj-link" hidden><span>Kopiraj link</span></button>
+          <button type="button" class="cs-veza" data-akcija="nazad">Nazad</button>
+        </div>
+
+        <div class="cs-korak" data-korak="poziv" hidden>
+          <span class="cs-uzivo"><span class="cs-tacka" aria-hidden="true"></span>Razgovor u toku</span>
+          <div class="cs-avatar" aria-hidden="true"><span>A</span></div>
+          <h2 class="cs-ko">Ana · <span class="cs-naziv"></span></h2>
+          <p class="cs-status" aria-live="polite">Povezivanje…</p>
+          <p class="cs-vreme"><span class="cs-sat">00:00</span> / <span class="cs-max"></span></p>
+          <div class="cs-traka" aria-hidden="true"><span></span></div>
+          <div class="cs-primeri"><p>Probajte da pitate</p><ul></ul></div>
+          <div class="cs-dugmad">
+            <button type="button" class="cs-zavrsi" data-akcija="zavrsi"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Završi razgovor</button>
+          </div>
+        </div>
+
+        <div class="cs-korak" data-korak="kraj" hidden>
+          <span class="eyebrow">Demo · <span class="cs-naziv"></span></span>
+          <h2>Razgovor je završen</h2>
+          <p class="cs-uvod cs-rezime"></p>
+          <div class="cs-dugmad">
+            <button type="button" class="btn btn-primary" data-akcija="ponovo">Pozovite ponovo</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="../assets/klijent-demo.js?v=2"></script>
+</body>
+</html>
